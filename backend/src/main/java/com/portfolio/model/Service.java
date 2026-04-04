@@ -35,6 +35,15 @@ public class Service {
     @Column(name = "price_range", length = 100)
     private String priceRange;
 
+    @Column(name = "tech_stack", columnDefinition = "TEXT")
+    private String techStack;
+
+    @Column(name = "github_url", length = 500)
+    private String githubUrl;
+
+    @Column(name = "live_url", length = 500)
+    private String liveUrl;
+
     @Builder.Default
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder = 0;

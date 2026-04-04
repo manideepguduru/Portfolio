@@ -23,6 +23,10 @@ public class ServiceDTO {
     @Size(max = 100)
     private String priceRange;
 
+    private String techStack;
+    private String githubUrl;
+    private String liveUrl;
+
     private Integer sortOrder = 0;
     private Boolean active = true;
 }

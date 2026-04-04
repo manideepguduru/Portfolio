@@ -17,7 +17,11 @@ interface Service {
   id: number;
   title: string;
   description: string;
+  techStack?: string;
+  githubUrl?: string;
+  liveUrl?: string;
   isActive: boolean;
+  active?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -386,6 +390,39 @@ function ServicesAdmin() {
                 </div>
 
                 <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Tech Stack (comma-separated) {hasChanged('techStack') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+                  <input 
+                    type="text" 
+                    value={formData.techStack || ''} 
+                    onChange={(e) => setFormData({...formData, techStack: e.target.value})}
+                    placeholder="e.g., React, TypeScript, Node.js"
+                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('techStack') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>GitHub URL {hasChanged('githubUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+                  <input 
+                    type="text" 
+                    value={formData.githubUrl || ''} 
+                    onChange={(e) => setFormData({...formData, githubUrl: e.target.value})}
+                    placeholder="https://github.com/..."
+                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('githubUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Live Demo URL {hasChanged('liveUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+                  <input 
+                    type="text" 
+                    value={formData.liveUrl || ''} 
+                    onChange={(e) => setFormData({...formData, liveUrl: e.target.value})}
+                    placeholder="https://demo..."
+                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('liveUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00d9ff', cursor: 'pointer' }}>
                     <input 
                       type="checkbox" 
@@ -424,9 +461,19 @@ function ServicesAdmin() {
                   <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.8rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.description}</p>
                 </div>
                 
+                {s.techStack && (
+                  <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
+                    {s.techStack.split(',').map((tech, idx) => (
+                      <span key={idx} style={{ backgroundColor: 'rgba(0, 217, 255, 0.15)', color: '#00d9ff', padding: '0.2rem 0.5rem', borderRadius: '3px', fontWeight: 'bold', border: '1px solid rgba(0, 217, 255, 0.3)' }}>
+                        {tech.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
-                  <span style={{ backgroundColor: s.isActive ? 'rgba(0, 217, 255, 0.2)' : 'rgba(160, 174, 192, 0.2)', color: s.isActive ? '#00d9ff' : '#a0aec0', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold' }}>
-                    {s.isActive ? '🟢 Active' : '⚫ Inactive'}
+                  <span style={{ backgroundColor: s.isActive || s.active ? 'rgba(0, 217, 255, 0.2)' : 'rgba(160, 174, 192, 0.2)', color: s.isActive || s.active ? '#00d9ff' : '#a0aec0', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold' }}>
+                    {s.isActive || s.active ? '🟢 Active' : '⚫ Inactive'}
                   </span>
                 </div>
 

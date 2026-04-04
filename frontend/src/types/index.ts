@@ -39,6 +39,9 @@ export interface Service {
   description: string;
   icon: string | null;
   priceRange: string | null;
+  techStack: string | null;       // comma-separated string
+  githubUrl: string | null;
+  liveUrl: string | null;
   sortOrder: number;
   active: boolean;
   createdAt: string;
