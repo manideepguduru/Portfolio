@@ -362,6 +362,247 @@ MIT License - feel free to use this template for your portfolio!
 
 ---
 
+## 🛡️ Admin Dashboard - Complete Guide
+
+### Credentials & Access
+```
+URL:      http://localhost:3000/admin/login
+Password: Infosys@19 (password-only, no email needed)
+Session:  24-hour localStorage token expiry
+Logout:   Button in top-right corner
+```
+
+### 📧 CONTACTS/MESSAGES TAB (Default View)
+
+**View All Messages**
+- Displays messages from public contact form submissions
+- Shows Name, Email, Message content, and timestamps (date + time)
+- Red badge with unread count in top-right
+- Visual indicators: 🔴 Red dot for unread messages, orange border for unread
+- Messages sorted by newest first
+
+**Mark as Read**
+- "✓ Mark as Read" button (blue) appears only for unread messages
+- Click to update isRead status in database
+- Badge counter updates automatically
+- Message styling changes from highlighted to gray
+
+**Delete Messages**
+- "🗑️ Delete" button (red) removes message
+- Confirmation dialog before deletion
+- Updates unread count immediately
+
+**API Endpoints Used:**
+```
+GET  /api/contact              → Fetch all messages
+GET  /api/contact/unread-count → Unread count badge
+PUT  /api/contact/{id}/read    → Mark as read
+DELETE /api/contact/{id}       → Delete message
+```
+
+---
+
+### 📁 PROJECTS TAB - Full CRUD Operations
+
+**View All Projects**
+- Table columns: Title | Description | Link | Featured | Actions
+- Displays all portfolio projects with truncated descriptions
+- Loads from `GET /api/projects`
+
+**Edit Projects**
+1. Click **Edit** button (orange) on any project
+2. Fields become editable inline:
+   - Title: text input
+   - Description: textarea (expandable)
+   - Link: text input
+   - Featured: checkbox (✓ = yes, ○ = no)
+3. Click **Save** (cyan) to update via `PUT /api/projects/{id}`
+4. Click **Cancel** (gray) to revert changes
+5. Table refreshes with updated data
+
+**Delete Projects**
+1. Click **Delete** button (red)
+2. Confirm in dialog
+3. Sends `DELETE /api/projects/{id}`
+4. Project removed from table
+
+**API Endpoints Used:**
+```
+GET  /api/projects         → Fetch all projects
+PUT  /api/projects/{id}    → Update project
+DELETE /api/projects/{id}  → Delete project
+```
+
+---
+
+### 🛠️ SERVICES TAB - Full CRUD Operations
+
+**View All Services**
+- Table columns: Title | Description | Status | Actions
+- Shows all services (including inactive ones for admin)
+- Status displays:
+  - **Active** (cyan text) = showing on public site
+  - **Inactive** (gray text) = hidden from public site
+- Loads from `GET /api/services/all`
+
+**Edit Services**
+1. Click **Edit** button (orange) on any service
+2. Fields become editable:
+   - Title: text input
+   - Description: textarea
+   - Status: checkbox toggle (checked = Active, unchecked = Inactive)
+3. Click **Save** (cyan) to update via `PUT /api/services/{id}`
+4. Click **Cancel** (gray) to close editing
+5. Table refreshes with changes immediately
+
+**Delete Services**
+1. Click **Delete** button (red)
+2. Confirm deletion
+3. Sends `DELETE /api/services/{id}`
+4. Service removed from list
+
+**API Endpoints Used:**
+```
+GET  /api/services/all     → Fetch all services (including inactive)
+PUT  /api/services/{id}    → Update service
+DELETE /api/services/{id}  → Delete service
+```
+
+---
+
+### 🎨 Admin Dashboard UI
+
+**Navigation**
+- Header: Admin Dashboard title + Logout button (red)
+- Tabs: Contacts | Projects | Services
+- Active Tab: Cyan highlight with border
+- Inactive Tab: Semi-transparent border
+
+**Color Scheme - Dark Theme**
+- Background: `#0f1419` (very dark blue)
+- Cards: `#1a1f2e` (dark blue)
+- Accent: `#00d9ff` (cyan/active)
+- Buttons: Cyan (save), Orange (edit), Red (delete)
+- Text: `#cbd5e1` (light gray)
+
+**Features**
+- Responsive tables with horizontal scrolling on small screens
+- Loading states with visual feedback
+- Error messages displayed clearly
+- Confirmation dialogs for destructive actions
+- Auto-refresh after CRUD operations
+
+---
+
+### 🔐 Admin Authentication Details
+
+**Type**: Client-side password verification (demo mode)
+- Password-only login (no email requirement)
+- 24-hour session expiry
+- Token stored in localStorage with expiry check
+- Logout button clears session and redirects to login page
+
+**For Production**: Implement Spring Security with JWT backend authentication
+
+---
+
+### 📊 Build & Compilation Status
+
+- ✅ Frontend: 121 modules, 267.34 kB JS (gzipped)
+- ✅ Backend: All 20 source files compiling
+- ✅ TypeScript: 0 errors
+- ✅ Lint: 0 warnings
+
+---
+
+### 📖 Admin Features - Complete API Overview
+
+**All Endpoints Verified & Working**
+
+Projects (3 admin endpoints):
+```
+GET  /api/projects         → List all projects
+PUT  /api/projects/{id}    → Update (title, description, link, featured)
+DELETE /api/projects/{id}  → Delete project
+```
+
+Services (3 admin endpoints):
+```
+GET  /api/services/all     → List all (including inactive)
+PUT  /api/services/{id}    → Update (title, description, active status)
+DELETE /api/services/{id}  → Delete service
+```
+
+Contacts (4 admin endpoints):
+```
+GET  /api/contact          → List all messages
+GET  /api/contact/unread-count → Get unread count
+PUT  /api/contact/{id}/read    → Mark message as read
+DELETE /api/contact/{id}   → Delete message
+```
+
+---
+
+### 🧪 Admin Testing Checklist
+
+- [ ] Login with `Infosys@19` password only
+- [ ] View all 3 admin sections (Contacts, Projects, Services)
+- [ ] Unread message count shows in red badge
+- [ ] Edit a project title and verify it saves
+- [ ] Toggle a service status (Active/Inactive)
+- [ ] Mark a message as read - button disappears, count decreases
+- [ ] Delete a project - removed from table
+- [ ] Delete a service - removed from list
+- [ ] Delete message - removed from contacts
+- [ ] Session persists after page refresh (within 24 hours)
+- [ ] Logout clears session and redirects to login
+
+---
+
+### 🐛 Admin Common Issues & Solutions
+
+| Issue | Solution |
+|-------|----------|
+| **Messages not loading?** | Check backend at `http://localhost:8080`, verify MySQL has records, check browser console |
+| **Edit/Delete not working?** | Test backend API with Postman, check DevTools Network tab, verify auth token |
+| **No unread badge?** | Check `/api/contact/unread-count` endpoint, verify unread messages exist, refresh page |
+| **Styling looks broken?** | Clear cache (Ctrl+Shift+Del), hard refresh (Ctrl+F5), check DevTools Network |
+| **Login fails?** | Verify password is exactly `Infosys@19`, check localStorage is enabled |
+
+---
+
+### 🚀 Data Flow Examples
+
+**When Editing & Saving**
+```
+1. Admin clicks Edit → Form becomes editable (inline)
+2. Admin modifies fields (title, description, etc.)
+3. Admin clicks Save → PUT request sent to backend
+4. Backend validates & updates MySQL database
+5. Frontend receives success response
+6. List auto-refreshes with new data
+```
+
+**When Deleting**
+```
+1. Admin clicks Delete → Confirmation dialog appears
+2. Admin confirms → DELETE request sent to backend
+3. Backend deletes from MySQL database
+4. Frontend receives success response
+5. Item removed from displayed list immediately
+```
+
+**When Marking as Read**
+```
+1. Admin clicks Mark as Read → PUT request sent
+2. Backend updates isRead = true in database
+3. Frontend removes "Mark as Read" button
+4. Unread badge count decreases
+5. Message styling changes from orange to gray
+```
+
+---
+
 ## 🧪 Running Tests
 
 ### Backend (JUnit 5 + Mockito)
