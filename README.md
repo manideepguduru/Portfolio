@@ -1,6 +1,16 @@
 # 🚀 Guduru Manideep — Portfolio (Full-Stack)
 
-React 18 + TypeScript frontend · Java Spring Boot 3 backend · MySQL database
+React 18 + TypeScript frontend · Java Spring Boot 3 backend · MySQL database · Admin Dashboard
+
+---
+
+## 📋 Overview
+
+A modern full-stack portfolio application with:
+- **Public Portfolio** — Showcase projects, services, and contact form
+- **Admin Dashboard** — Manage projects, services, and contact submissions
+- **RESTful API** — Spring Boot backend with JWT-capable authentication
+- **Responsive Design** — Works seamlessly across all devices
 
 ---
 
@@ -8,8 +18,8 @@ React 18 + TypeScript frontend · Java Spring Boot 3 backend · MySQL database
 
 ```
 portfolio/
-├── frontend/          ← React + TypeScript (Vite)
-├── backend/           ← Spring Boot 3 + MySQL
+├── frontend/          ← React 18 + TypeScript (Vite) + Admin Panel
+├── backend/           ← Spring Boot 3 + Java 17 + MySQL
 └── docs/
     └── schema.sql     ← Database schema + seed data
 ```
@@ -33,14 +43,13 @@ portfolio/
 1. Open MySQL Workbench or terminal and run:
 
 ```sql
--- Run the full schema file:
 SOURCE /path/to/portfolio/docs/schema.sql;
 ```
 
-Or paste it directly. This creates:
+This creates:
 - `portfolio_db` database
 - `projects`, `services`, `contacts` tables
-- Seed data (projects + 6 services including Business Websites & Final Year Projects)
+- Seed data for demonstration
 
 2. Note your MySQL username and password.
 
@@ -54,19 +63,17 @@ Open `backend/src/main/resources/application.properties` and update:
 spring.datasource.url=jdbc:mysql://localhost:3306/portfolio_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
 spring.datasource.username=root          # ← your MySQL username
 spring.datasource.password=your_password # ← your MySQL password
+portfolio.cors.allowed-origins=http://localhost:3000,http://localhost:5173
 ```
-
-> **First run tip:** Change `spring.jpa.hibernate.ddl-auto=validate` to `update`
-> on the very first run if you want Hibernate to auto-verify the schema,
-> then switch back to `validate`.
 
 ---
 
 ## ▶️ Step 3 — Run the Backend
 
 ```bash
-cd portfolio/backend
-./mvnw spring-boot:run
+cd backend
+mvn clean install
+mvn spring-boot:run
 # Windows: mvnw.cmd spring-boot:run
 ```
 
@@ -83,21 +90,236 @@ GET http://localhost:8080/api/services   → lists active services
 ## ▶️ Step 4 — Run the Frontend
 
 ```bash
-cd portfolio/frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-Frontend starts at **http://localhost:3000**
+Frontend starts at **http://localhost:3000** (or **http://localhost:5173** if 3000 is in use)
 
-> Vite proxies all `/api` calls to `http://localhost:8080` automatically —
-> no CORS issues in development.
+---
+
+## 👤 Admin Panel Access
+
+### Admin Login Credentials
+
+```
+Email:    admin@portfolio.com
+Password: admin@123
+```
+
+### Access Points
+
+| Route | Purpose |
+|-------|---------|
+| `/admin/login` | Admin login page |
+| `/admin` | Admin dashboard (requires authentication) |
+
+### Features
+- ✅ View all portfolio contacts
+- ✅ Mark messages as read/unread
+- ✅ Delete contact submissions
+- ✅ Manage projects (add, edit, delete)
+- ✅ Manage services (add, edit, delete)
+- ✅ View contact statistics
 
 ---
 
 ## 🌐 Pages & Routes
 
-| Route        | Description                              |
+### Public Routes
+| Route | Description |
+|-------|-------------|
+| `/` | Home page with hero, stats, featured projects |
+| `/projects` | All portfolio projects |
+| `/services` | Available services |
+| `/contact` | Contact form with WhatsApp link |
+
+### Admin Routes
+| Route | Description |
+|-------|-------------|
+| `/admin/login` | Admin authentication |
+| `/admin` | Dashboard with management tabs |
+
+---
+
+## 📦 API Endpoints
+
+### Public Endpoints
+```
+GET    /api/projects          → List active projects
+GET    /api/services          → List active services
+POST   /api/contact           → Submit contact form
+```
+
+### Admin Endpoints (Protected)
+```
+GET    /api/admin/contact          → All messages
+GET    /api/admin/contact/unread   → Unread messages
+GET    /api/admin/projects         → All projects
+POST   /api/admin/projects         → Create project
+PUT    /api/admin/projects/:id     → Update project
+DELETE /api/admin/projects/:id     → Delete project
+```
+
+---
+
+## 🚀 Deployment
+
+### Frontend to Vercel
+```bash
+cd frontend
+npm run build
+# Deploy dist folder to Vercel
+```
+
+Environment variables (`.env.production`):
+```
+VITE_API_URL=https://your-backend-render.onrender.com/api
+```
+
+### Backend to Render
+
+1. Create `render.yaml` in project root (already included)
+2. Connect repository to Render
+3. Set environment variables:
+```
+DATABASE_URL=mysql://user:pass@host:3306/portfolio_db
+SPRING_PROFILES_ACTIVE=production
+JWT_SECRET=your-secret-key-change-this
+```
+
+---
+
+## 🔐 Security Notes
+
+⚠️ **Important for Production:**
+
+1. **Change default admin credentials** in database after first deployment
+2. **Enable JWT authentication** in backend for production
+3. **Use environment variables** for sensitive data (DB password, JWT secret)
+4. **Enable HTTPS** on production domains
+5. **Update CORS allowed origins** to match your deployed frontend
+
+---
+
+## 📱 Features
+
+### Frontend
+- ⚡ Lightning-fast with Vite
+- 🎨 Beautiful UI with CSS modules
+- 📱 Fully responsive design
+- ♿ Accessible components
+- 🌙 Dark theme ready
+- 🔗 React Router navigation
+
+### Backend
+- 🛡️ CORS configured for development & production
+- 📦 RESTful API architecture
+- 🔄 MySQL with JPA/Hibernate ORM
+- 📝 Comprehensive API documentation
+- ⚡ Optimized database queries
+- 🚀 Spring Boot 3 with Java 17
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React 18
+- TypeScript 5.2
+- Vite 5.4
+- React Router v6
+- CSS Modules
+
+### Backend
+- Spring Boot 3.2
+- Java 17
+- MySQL 8.0
+- JPA/Hibernate
+- Maven 3.8
+
+---
+
+## 📝 Environment Files
+
+### Frontend (`.env.example`)
+```
+VITE_API_URL=http://localhost:8080/api
+VITE_ADMIN_API_URL=http://localhost:8080/api/admin
+```
+
+### Backend (`application.properties`)
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/portfolio_db
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=validate
+```
+
+---
+
+## 📚 Database Schema
+
+**projects** table:
+```sql
+id, title, description, link, image_url, created_at, updated_at
+```
+
+**services** table:
+```sql
+id, title, description, is_active, created_at, updated_at
+```
+
+**contacts** table:
+```sql
+id, name, email, message, is_read, created_at, updated_at
+```
+
+See `docs/schema.sql` for complete schema with indexes and seed data.
+
+---
+
+## ❓ Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Frontend can't reach backend | Check CORS settings in `application.properties` |
+| Admin login fails | Verify admin credentials in database |
+| Port 3000 already in use | Run `npm run dev -- --port 5173` |
+| MySQL connection error | Check username, password, and database exists |
+| TypeScript errors | Run `npm install` in frontend folder |
+
+---
+
+## 📧 Contact & Support
+
+- **Portfolio:** [Your Portfolio Link]
+- **Email:** softwarekattubanisa@gmail.com
+- **WhatsApp:** +91 9346929001
+- **GitHub:** [Your GitHub Profile]
+
+---
+
+## 📄 License
+
+MIT License - feel free to use this template for your portfolio!
+
+---
+
+## 🎯 Future Enhancements
+
+- [ ] Email notifications for new contacts
+- [ ] File upload for project images
+- [ ] Analytics dashboard
+- [ ] Newsletter subscription
+- [ ] Blog section
+- [ ] Dark/Light theme toggle
+
+---
+
+**Made with ☕ and clean code**
+
 |--------------|------------------------------------------|
 | `/`          | Home — Hero, Stats, About, Services, Projects, Contact |
 | `/projects`  | Full project list with featured filter   |
