@@ -4,9 +4,11 @@ import type {
   Service, ServiceDTO, Contact, ContactDTO,
 } from '../types';
 
-// Base URL — Vite proxies /api → http://localhost:8080 in dev
+// Base URL — Use environment variable, fallback to /api for dev
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
 });
