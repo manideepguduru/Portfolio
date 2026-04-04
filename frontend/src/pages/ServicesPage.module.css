@@ -81,8 +81,8 @@
 }
 .grid { 
   display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+  gap: 1.4rem;
 }
 
 .process { padding: 3.5rem 5%; background: #0a0e1a; }
@@ -130,7 +130,7 @@
 }
 
 @media (max-width: 1024px) {
-  .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.6rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
 }
 
 @media (max-width: 900px) {
@@ -141,11 +141,11 @@
   .highlights { padding: 2.5rem 5%; }
   .grid_section { padding: 2.5rem 5%; }
   .process { padding: 2.5rem 5%; }
-  .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.4rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
 }
 
 @media (max-width: 768px) {
-  .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.9rem; }
   .hero { padding: 2rem 5%; }
   .highlight { padding: 1.4rem; gap: 1rem; flex-direction: column; text-align: center; }
   .hlIcon { width: 55px; height: 55px; font-size: 2rem; margin: 0 auto; }
