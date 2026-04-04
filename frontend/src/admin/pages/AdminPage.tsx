@@ -9,6 +9,8 @@ interface Project {
   link: string;
   imageUrl: string;
   featured: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Service {
@@ -16,6 +18,8 @@ interface Service {
   title: string;
   description: string;
   isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Contact {
@@ -30,7 +34,7 @@ interface Contact {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 export default function AdminPage({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<'projects' | 'services' | 'contacts'>('projects');
+  const [tab, setTab] = useState<'contacts' | 'projects' | 'services'>('contacts');
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -43,7 +47,7 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
     <div style={{ minHeight: '100vh', backgroundColor: '#0f1419', color: '#cbd5e1' }}>
       {/* Header */}
       <div style={{ backgroundColor: '#1a1f2e', borderBottom: '2px solid rgba(0, 217, 255, 0.2)', padding: '1.5rem 2rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h1 style={{ color: '#00d9ff', margin: 0 }}>🛡️ Admin Dashboard</h1>
           <button 
             onClick={handleLogout}
@@ -64,8 +68,8 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
 
       {/* Tabs */}
       <div style={{ backgroundColor: '#141a2f', padding: '1rem 2rem', borderBottom: '1px solid rgba(0, 217, 255, 0.1)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '1rem' }}>
-          {['projects', 'services', 'contacts'].map((t) => (
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '1rem' }}>
+          {['contacts', 'projects', 'services'].map((t) => (
             <button 
               key={t}
               onClick={() => setTab(t as any)}
@@ -88,10 +92,10 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
+        {tab === 'contacts' && <ContactsAdmin />}
         {tab === 'projects' && <ProjectsAdmin />}
         {tab === 'services' && <ServicesAdmin />}
-        {tab === 'contacts' && <ContactsAdmin />}
       </div>
     </div>
   );
@@ -101,6 +105,8 @@ function ProjectsAdmin() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [formData, setFormData] = useState<Partial<Project>>({});
 
   useEffect(() => {
     fetchProjects();
@@ -114,8 +120,37 @@ function ProjectsAdmin() {
       setProjects(data.data || []);
     } catch (err) {
       setError('Failed to load projects');
+      console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startEdit = (project: Project) => {
+    setEditingId(project.id);
+    setFormData({ ...project });
+  };
+
+  const saveEdit = async (id: number) => {
+    if (!formData.title || !formData.description || !formData.link) {
+      alert('Please fill all fields');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/projects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) {
+        setEditingId(null);
+        await fetchProjects();
+      } else {
+        alert('Failed to update project');
+      }
+    } catch (err) {
+      alert('Failed to update project');
+      console.error(err);
     }
   };
 
@@ -145,33 +180,93 @@ function ProjectsAdmin() {
             <thead>
               <tr style={{ borderBottom: '2px solid rgba(0, 217, 255, 0.2)' }}>
                 <th style={{ padding: '0.8rem', textAlign: 'left', color: '#00d9ff' }}>Title</th>
+                <th style={{ padding: '0.8rem', textAlign: 'left', color: '#00d9ff' }}>Description</th>
                 <th style={{ padding: '0.8rem', textAlign: 'left', color: '#00d9ff' }}>Link</th>
                 <th style={{ padding: '0.8rem', textAlign: 'center', color: '#00d9ff' }}>Featured</th>
-                <th style={{ padding: '0.8rem', textAlign: 'center', color: '#00d9ff' }}>Action</th>
+                <th style={{ padding: '0.8rem', textAlign: 'center', color: '#00d9ff' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {projects.map(p => (
                 <tr key={p.id} style={{ borderBottom: '1px solid rgba(0, 217, 255, 0.1)' }}>
-                  <td style={{ padding: '0.8rem', color: '#cbd5e1' }}>{p.title}</td>
-                  <td style={{ padding: '0.8rem', color: '#a0aec0', fontSize: '0.85rem' }}>{p.link}</td>
+                  <td style={{ padding: '0.8rem' }}>
+                    {editingId === p.id ? (
+                      <input 
+                        type="text" 
+                        value={formData.title || ''} 
+                        onChange={(e) => setFormData({...formData, title: e.target.value})}
+                        style={{ width: '100%', padding: '0.4rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px' }}
+                      />
+                    ) : (
+                      <span style={{ color: '#cbd5e1' }}>{p.title}</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.8rem', maxWidth: '200px' }}>
+                    {editingId === p.id ? (
+                      <textarea 
+                        value={formData.description || ''} 
+                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        style={{ width: '100%', padding: '0.4rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', minHeight: '60px', fontFamily: 'monospace', fontSize: '0.8rem' }}
+                      />
+                    ) : (
+                      <span style={{ color: '#a0aec0', fontSize: '0.85rem' }}>{p.description?.substring(0, 50)}...</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.8rem' }}>
+                    {editingId === p.id ? (
+                      <input 
+                        type="text" 
+                        value={formData.link || ''} 
+                        onChange={(e) => setFormData({...formData, link: e.target.value})}
+                        style={{ width: '100%', padding: '0.4rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px' }}
+                      />
+                    ) : (
+                      <span style={{ color: '#a0aec0', fontSize: '0.85rem' }}>{p.link}</span>
+                    )}
+                  </td>
                   <td style={{ padding: '0.8rem', textAlign: 'center', color: p.featured ? '#00d9ff' : '#a0aec0' }}>
-                    {p.featured ? '✓' : '○'}
+                    {editingId === p.id ? (
+                      <input 
+                        type="checkbox" 
+                        checked={formData.featured || false}
+                        onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                      />
+                    ) : (
+                      p.featured ? '✓' : '○'
+                    )}
                   </td>
                   <td style={{ padding: '0.8rem', textAlign: 'center' }}>
-                    <button 
-                      onClick={() => deleteProject(p.id)}
-                      style={{ 
-                        padding: '0.4rem 0.8rem',
-                        backgroundColor: '#ff6b6b',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Delete
-                    </button>
+                    {editingId === p.id ? (
+                      <>
+                        <button 
+                          onClick={() => saveEdit(p.id)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontWeight: 'bold', fontSize: '0.85rem' }}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          onClick={() => setEditingId(null)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => startEdit(p)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.85rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => deleteProject(p.id)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -187,6 +282,8 @@ function ServicesAdmin() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [formData, setFormData] = useState<Partial<Service>>({});
 
   useEffect(() => {
     fetchServices();
@@ -200,25 +297,37 @@ function ServicesAdmin() {
       setServices(data.data || []);
     } catch (err) {
       setError('Failed to load services');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleActive = async (id: number, isActive: boolean) => {
+  const startEdit = (service: Service) => {
+    setEditingId(service.id);
+    setFormData({ ...service });
+  };
+
+  const saveEdit = async (id: number) => {
+    if (!formData.title || !formData.description) {
+      alert('Please fill all fields');
+      return;
+    }
     try {
-      const service = services.find(s => s.id === id);
-      if (!service) return;
-      
-      await fetch(`${API_URL}/services/${id}`, {
+      const res = await fetch(`${API_URL}/services/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...service, isActive: !isActive })
+        body: JSON.stringify(formData)
       });
-      
-      setServices(services.map(s => s.id === id ? { ...s, isActive: !isActive } : s));
+      if (res.ok) {
+        setEditingId(null);
+        await fetchServices();
+      } else {
+        alert('Failed to update service');
+      }
     } catch (err) {
       alert('Failed to update service');
+      console.error(err);
     }
   };
 
@@ -248,6 +357,7 @@ function ServicesAdmin() {
             <thead>
               <tr style={{ borderBottom: '2px solid rgba(0, 217, 255, 0.2)' }}>
                 <th style={{ padding: '0.8rem', textAlign: 'left', color: '#00d9ff' }}>Title</th>
+                <th style={{ padding: '0.8rem', textAlign: 'left', color: '#00d9ff' }}>Description</th>
                 <th style={{ padding: '0.8rem', textAlign: 'center', color: '#00d9ff' }}>Status</th>
                 <th style={{ padding: '0.8rem', textAlign: 'center', color: '#00d9ff' }}>Actions</th>
               </tr>
@@ -255,38 +365,80 @@ function ServicesAdmin() {
             <tbody>
               {services.map(s => (
                 <tr key={s.id} style={{ borderBottom: '1px solid rgba(0, 217, 255, 0.1)' }}>
-                  <td style={{ padding: '0.8rem', color: '#cbd5e1' }}>{s.title}</td>
-                  <td style={{ padding: '0.8rem', textAlign: 'center', color: s.isActive ? '#00d9ff' : '#a0aec0' }}>
-                    {s.isActive ? 'Active' : 'Inactive'}
+                  <td style={{ padding: '0.8rem' }}>
+                    {editingId === s.id ? (
+                      <input 
+                        type="text" 
+                        value={formData.title || ''} 
+                        onChange={(e) => setFormData({...formData, title: e.target.value})}
+                        style={{ width: '100%', padding: '0.4rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px' }}
+                      />
+                    ) : (
+                      <span style={{ color: '#cbd5e1' }}>{s.title}</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.8rem', maxWidth: '250px' }}>
+                    {editingId === s.id ? (
+                      <textarea 
+                        value={formData.description || ''} 
+                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        style={{ width: '100%', padding: '0.4rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', minHeight: '60px', fontFamily: 'monospace', fontSize: '0.8rem' }}
+                      />
+                    ) : (
+                      <span style={{ color: '#a0aec0', fontSize: '0.85rem' }}>{s.description?.substring(0, 60)}...</span>
+                    )}
                   </td>
                   <td style={{ padding: '0.8rem', textAlign: 'center' }}>
-                    <button 
-                      onClick={() => toggleActive(s.id, s.isActive)}
-                      style={{ 
-                        padding: '0.4rem 0.8rem',
-                        backgroundColor: s.isActive ? '#ff9500' : '#00d9ff',
-                        color: s.isActive ? 'white' : '#0f1419',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        marginRight: '0.5rem'
-                      }}
-                    >
-                      {s.isActive ? 'Disable' : 'Enable'}
-                    </button>
-                    <button 
-                      onClick={() => deleteService(s.id)}
-                      style={{ 
-                        padding: '0.4rem 0.8rem',
-                        backgroundColor: '#ff6b6b',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Delete
-                    </button>
+                    {editingId === s.id ? (
+                      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={formData.isActive || false}
+                          onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <span style={{ color: formData.isActive ? '#00d9ff' : '#a0aec0', fontSize: '0.85rem' }}>
+                          {formData.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </label>
+                    ) : (
+                      <span style={{ color: s.isActive ? '#00d9ff' : '#a0aec0', fontWeight: 'bold' }}>
+                        {s.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    )}
+                  </td>
+                  <td style={{ padding: '0.8rem', textAlign: 'center' }}>
+                    {editingId === s.id ? (
+                      <>
+                        <button 
+                          onClick={() => saveEdit(s.id)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontWeight: 'bold', fontSize: '0.85rem' }}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          onClick={() => setEditingId(null)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => startEdit(s)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.85rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => deleteService(s.id)}
+                          style={{ padding: '0.4rem 0.8rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -314,9 +466,13 @@ function ContactsAdmin() {
       setLoading(true);
       const res = await fetch(`${API_URL}/contact`);
       const data = await res.json();
-      setContacts(data.data || []);
+      // Sort by date, newest first
+      const contactsList = data.data || [];
+      contactsList.sort((a: Contact, b: Contact) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setContacts(contactsList);
     } catch (err) {
       setError('Failed to load contacts');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -326,9 +482,11 @@ function ContactsAdmin() {
     try {
       const res = await fetch(`${API_URL}/contact/unread-count`);
       const data = await res.json();
-      setUnreadCount(data.data || 0);
+      // Handle both direct count or nested count property
+      const count = data.data?.count || data.data || data.count || 0;
+      setUnreadCount(count);
     } catch (err) {
-      // Silent fail
+      console.error('Failed to fetch unread count', err);
     }
   };
 
@@ -357,13 +515,15 @@ function ContactsAdmin() {
   return (
     <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.1)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h2 style={{ color: '#00d9ff', margin: 0 }}>📧 Contact Submissions</h2>
-        <span style={{ backgroundColor: '#ff6b6b', color: 'white', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.85rem' }}>
-          Unread: {unreadCount}
-        </span>
+        <h2 style={{ color: '#00d9ff', margin: 0 }}>📧 Messages (From Contact Form)</h2>
+        {unreadCount > 0 && (
+          <span style={{ backgroundColor: '#ff6b6b', color: 'white', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+            📬 {unreadCount} Unread
+          </span>
+        )}
       </div>
       
-      {loading && <p style={{ color: '#00d9ff' }}>Loading contacts...</p>}
+      {loading && <p style={{ color: '#00d9ff' }}>Loading messages...</p>}
       {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
       
       {!loading && contacts.length === 0 && <p style={{ color: '#a0aec0' }}>No contact messages yet</p>}
@@ -378,26 +538,29 @@ function ContactsAdmin() {
                 padding: '1rem',
                 marginBottom: '1rem',
                 borderRadius: '4px',
-                border: `1px solid ${c.isRead ? 'rgba(0, 217, 255, 0.1)' : 'rgba(0, 217, 255, 0.3)'}`,
-                borderLeft: `4px solid ${c.isRead ? '#a0aec0' : '#00d9ff'}`
+                border: `1px solid ${c.isRead ? 'rgba(0, 217, 255, 0.1)' : 'rgba(0, 217, 255, 0.5)'}`,
+                borderLeft: `4px solid ${c.isRead ? '#a0aec0' : '#ff9500'}`
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
                 <div>
-                  <p style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontWeight: 'bold' }}>{c.name}</p>
-                  <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.85rem' }}>{c.email}</p>
+                  <p style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {!c.isRead && <span style={{ fontSize: '1rem' }}>🔴</span>}
+                    {c.name}
+                  </p>
+                  <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.85rem' }}>📧 {c.email}</p>
                 </div>
-                <span style={{ fontSize: '0.75rem', color: '#78849c' }}>
-                  {new Date(c.createdAt).toLocaleDateString()}
+                <span style={{ fontSize: '0.75rem', color: '#78849c', whiteSpace: 'nowrap' }}>
+                  {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString()}
                 </span>
               </div>
-              <p style={{ margin: '0.8rem 0', color: '#cbd5e1', lineHeight: '1.5' }}>{c.message}</p>
+              <p style={{ margin: '0.8rem 0', color: '#cbd5e1', lineHeight: '1.6', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{c.message}</p>
               <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem' }}>
                 {!c.isRead && (
                   <button 
                     onClick={() => markAsRead(c.id)}
                     style={{ 
-                      padding: '0.4rem 0.8rem',
+                      padding: '0.4rem 1rem',
                       backgroundColor: '#00d9ff',
                       color: '#0f1419',
                       border: 'none',
@@ -407,13 +570,13 @@ function ContactsAdmin() {
                       fontWeight: 'bold'
                     }}
                   >
-                    Mark as Read
+                    ✓ Mark as Read
                   </button>
                 )}
                 <button 
                   onClick={() => deleteContact(c.id)}
                   style={{ 
-                    padding: '0.4rem 0.8rem',
+                    padding: '0.4rem 1rem',
                     backgroundColor: '#ff6b6b',
                     color: 'white',
                     border: 'none',
@@ -422,7 +585,7 @@ function ContactsAdmin() {
                     fontSize: '0.85rem'
                   }}
                 >
-                  Delete
+                  🗑️ Delete
                 </button>
               </div>
             </div>
