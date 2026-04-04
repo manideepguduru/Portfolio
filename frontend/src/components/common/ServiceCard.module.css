@@ -2,13 +2,13 @@
   background: linear-gradient(135deg, rgba(19, 42, 69, 0.8), rgba(26, 58, 82, 0.75));
   border: 2px solid rgba(0, 216, 255, 0.3);
   border-radius: 12px;
-  padding: 1.6rem;
+  padding: 2rem;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1.2rem;
   height: 100%;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(0, 216, 255, 0.15);
 }
@@ -134,7 +134,7 @@
 .title { 
   font-family: 'Syne', sans-serif; 
   font-weight: 900; 
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #f1f5f9;
   line-height: 1.35;
   letter-spacing: -0.02em;
@@ -150,8 +150,8 @@
 
 .desc { 
   color: #a0aec0; 
-  font-size: 0.85rem; 
-  line-height: 1.6; 
+  font-size: 0.9rem; 
+  line-height: 1.7; 
   flex: 1;
   font-weight: 500;
   letter-spacing: 0.4px;
