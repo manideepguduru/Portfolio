@@ -1,0 +1,172 @@
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: linear-gradient(135deg, #0e1b2e, #132a45);
+  border-bottom: 2px solid rgba(0, 216, 255, 0.3);
+}
+
+.scrolled {
+  background: linear-gradient(135deg, #132a45, #1a3a52);
+  border-bottom: 2px solid rgba(0, 216, 255, 0.6);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(0, 216, 255, 0.1);
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 950;
+  font-size: 1.6rem;
+  color: #fff;
+  letter-spacing: -0.02em;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, #00d8ff, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: pointer;
+  text-shadow: 0 4px 15px rgba(0, 216, 255, 0.3);
+  position: relative;
+}
+
+.logo:hover { 
+  transform: scale(1.1) rotate(3deg);
+  filter: drop-shadow(0 0 15px rgba(0, 216, 255, 0.5));
+}
+
+.logo span { 
+  font-weight: 950;
+  background: linear-gradient(135deg, #00d8ff, #5dade2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.links {
+  display: flex;
+  gap: 3.5rem;
+  list-style: none;
+}
+
+.link {
+  color: #e8e8e8;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  transition: var(--transition);
+  position: relative;
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 0;
+  width: 0; height: 5px;
+  background: linear-gradient(90deg, #00d8ff, #3498db, #5dade2);
+  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 10px;
+}
+
+.link:hover, .link.active {
+  color: #00d8ff;
+  transform: translateY(-3px) scaleX(1.1);
+  text-shadow: 0 4px 10px rgba(0, 216, 255, 0.3);
+}
+
+.link:hover::after, .link.active::after {
+  width: 100%;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  width: 26px; height: 2.5px;
+  background: #cbd5e1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+}
+
+/* Mobile dropdown */
+.mobile {
+  position: absolute;
+  top: 70px; left: 0; right: 0;
+  background: rgba(15, 20, 36, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+  padding: 1.5rem 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobileLink {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.08);
+  transition: all 0.3s;
+}
+.mobileLink:hover, .mobileLink.active { color: #00d9ff; }
+
+@media (max-width: 900px) {
+  .nav { padding: 0 4%; }
+  .logo { font-size: 1.2rem; }
+  .links { gap: 2rem; }
+  .link { font-size: 0.85rem; }
+}
+
+@media (max-width: 768px) {
+  .links { display: none; }
+  .hamburger { display: flex; }
+  .nav { height: 60px; padding: 0 4%; }
+  .logo { font-size: 1.1rem; }
+  .mobile { top: 60px; padding: 1.2rem 4%; gap: 0.6rem; }
+  .mobileLink { font-size: 0.9rem; padding: 0.7rem 0; }
+}
+
+@media (max-width: 600px) {
+  .nav { height: 55px; padding: 0 3%; }
+  .logo { font-size: 1rem; }
+  .hamburger { gap: 5px; }
+  .hamburger span { width: 24px; height: 2px; }
+  .mobile { top: 55px; padding: 1rem 3%; gap: 0.5rem; }
+  .mobileLink { font-size: 0.85rem; padding: 0.6rem 0; }
+}
+
+@media (max-width: 480px) {
+  .nav { height: 50px; }
+  .logo { font-size: 0.95rem; }
+}

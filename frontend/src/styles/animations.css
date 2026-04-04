@@ -1,0 +1,99 @@
+/* Scroll-triggered animations */
+
+.scroll-reveal {
+  animation: revealUp 0.7s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal-fade {
+  animation: fadeSide 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeSide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-highlight {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.scroll-highlight::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.5s ease;
+}
+
+.scroll-highlight.active::before {
+  transform: scaleY(1);
+}
+
+.scroll-highlight.active {
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 8px;
+  padding: 0 1rem;
+}
+
+/* Section entrance animations */
+.section-entrance {
+  animation: sectionEntry 0.6s ease-out;
+}
+
+@keyframes sectionEntry {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Staggered animations for list items */
+.list-item-animated {
+  animation: slideInLeft 0.5s ease-out backwards;
+}
+
+.list-item-animated:nth-child(1) { animation-delay: 0.1s; }
+.list-item-animated:nth-child(2) { animation-delay: 0.2s; }
+.list-item-animated:nth-child(3) { animation-delay: 0.3s; }
+.list-item-animated:nth-child(4) { animation-delay: 0.4s; }
+.list-item-animated:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

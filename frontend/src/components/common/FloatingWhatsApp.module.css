@@ -1,0 +1,55 @@
+.btn {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 900;
+  width: 68px; 
+  height: 68px;
+  background: linear-gradient(135deg, #25d366 0%, #20a853 100%);
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 32px rgba(37, 211, 102, 0.35), inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: waPulse 3.5s ease-in-out infinite;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.btn:hover { 
+  transform: scale(1.2) translateY(-4px);
+  box-shadow: 0 12px 48px rgba(37, 211, 102, 0.45), inset 0 2px 8px rgba(255, 255, 255, 0.15), 0 0 0 8px rgba(37, 211, 102, 0.15);
+}
+
+.btn:active {
+  transform: scale(1.15) translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .btn {
+    width: 62px;
+    height: 62px;
+    bottom: 2rem;
+    right: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 56px;
+    height: 56px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+@keyframes waPulse {
+  0%, 100% { 
+    box-shadow: 0 6px 32px rgba(37, 211, 102, 0.35), inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 0 6px 48px rgba(37, 211, 102, 0.5), 0 0 0 12px rgba(37, 211, 102, 0.12), inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+}

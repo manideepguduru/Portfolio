@@ -1,0 +1,313 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 75px 5% 4rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 800px at 10% 30%, rgba(0, 216, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(circle 700px at 90% 70%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+    radial-gradient(circle 600px at 50% 10%, rgba(93, 173, 226, 0.08) 0%, transparent 50%),
+    radial-gradient(circle 900px at 80% 20%, rgba(5, 177, 229, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  animation: meshBounce 6s ease-in-out infinite;
+}
+
+@keyframes meshBounce {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.mesh::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 216, 255, 0.08), transparent);
+  border-radius: 50%;
+  animation: float1 8s ease-in-out infinite;
+  filter: blur(40px);
+}
+
+.mesh::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(52, 152, 219, 0.08), transparent);
+  border-radius: 50%;
+  animation: float2 10s ease-in-out infinite reverse;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-60px) translateX(40px) rotate(10deg); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(50px) translateX(-50px) rotate(-10deg); }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  animation: slideInUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: linear-gradient(135deg, rgba(19, 42, 69, 0.9), rgba(26, 58, 82, 0.85));
+  padding: 4rem;
+  border-radius: 30px;
+  border: 2px solid rgba(0, 216, 255, 0.3);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(0, 216, 255, 0.15),
+    0 0 20px rgba(52, 152, 219, 0.1),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.content::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00d8ff, #3498db, #5dade2, transparent);
+  opacity: 0.6;
+}
+
+.content::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 15px,
+      rgba(0, 216, 255, 0.02) 15px,
+      rgba(0, 216, 255, 0.02) 30px
+    );
+  opacity: 0.3;
+  border-radius: 25px;
+  pointer-events: none;
+}
+
+@keyframes patternShift {
+  0% { background-position: 0 0; }
+  100% { background-position: 30px 30px; }
+}
+
+@keyframes slideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(80px) rotateX(20deg);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, #00d8ff, #3498db);
+  border: 2px solid rgba(0, 216, 255, 0.5);
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 216, 255, 0.25);
+}
+
+.badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  animation: shimmerBadge 2s infinite;
+}
+
+@keyframes shimmerBadge {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.badge:hover {
+  background: linear-gradient(135deg, #3498db, #00d8ff);
+  transform: translateY(-4px);
+  border-color: rgba(0, 216, 255, 0.8);
+  box-shadow: 0 15px 45px rgba(0, 216, 255, 0.35), 0 0 30px rgba(52, 152, 219, 0.2);
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 217, 255, 0.25), inset 0 0 8px rgba(0, 217, 255, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.45), inset 0 0 12px rgba(0, 217, 255, 0.15); }
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12em;
+}
+
+.typed {
+  display: flex;
+  align-items: center;
+  min-height: 1.3em;
+  color: #f1f5f9;
+  font-weight: 800;
+}
+
+.cursor {
+  display: inline-block;
+  width: 5px;
+  height: 0.95em;
+  background: linear-gradient(180deg, #00d8ff, #3498db);
+  margin-left: 8px;
+  animation: blink 0.6s step-end infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
+
+@keyframes blink { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.highlight {
+  background: linear-gradient(135deg, #00d9ff 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.05em;
+}
+
+.sub {
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 620px;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.sub strong { 
+  color: #f1f5f9; 
+  font-weight: 700;
+  background: linear-gradient(135deg, #00d9ff, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.proof {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(20, 26, 47, 0.9);
+  border: 1.5px solid rgba(0, 217, 255, 0.2);
+  padding: 0.7rem 1.4rem;
+  border-radius: 100px;
+  font-size: 0.87rem;
+  color: #cbd5e1;
+  font-weight: 600;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pill:hover {
+  border-color: rgba(0, 217, 255, 0.5);
+  background: rgba(0, 217, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 217, 255, 0.15);
+}
+
+.pill strong { 
+  color: #00d9ff; 
+  font-weight: 800;
+}
+
+.btns {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .hero { padding-top: 100px; min-height: auto; padding-bottom: 3rem; }
+  .content { padding: 2.5rem; border-radius: 20px; }
+  .badge { padding: 0.5rem 1.2rem; font-size: 0.78rem; margin-bottom: 1.5rem; }
+  .sub { font-size: 1.05rem; margin-bottom: 2rem; }
+  .proof { gap: 0.9rem; margin-bottom: 2.5rem; }
+  .pill { padding: 0.6rem 1.2rem; font-size: 0.82rem; }
+  .btns { gap: 1rem; }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 80px 5% 2.5rem; }
+  .content { padding: 2rem; }
+  h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-bottom: 1rem; }
+  .sub { font-size: 1rem; max-width: 100%; line-height: 1.7; margin-bottom: 1.5rem; }
+  .badge { margin-bottom: 1rem; padding: 0.5rem 1rem; font-size: 0.74rem; }
+  .proof { gap: 0.7rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .pill { padding: 0.5rem 1rem; font-size: 0.77rem; }
+  .btns { gap: 0.8rem; }
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 70px 4% 2rem; }
+  .content { padding: 1.8rem; border-radius: 18px; }
+  h1 { font-size: clamp(1.8rem, 5.5vw, 2.8rem); margin-bottom: 0.8rem; }
+  .badge { font-size: 0.7rem; padding: 0.4rem 1rem; margin-bottom: 0.8rem; }
+  .sub { font-size: 0.95rem; margin-bottom: 1.3rem; }
+  .proof { gap: 0.6rem; margin-bottom: 1.5rem; }
+  .pill { padding: 0.45rem 0.9rem; font-size: 0.73rem; }
+  .btns { gap: 0.6rem; flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .hero { padding: 65px 4% 1.5rem; }
+  .content { padding: 1.5rem; }
+  h1 { font-size: clamp(1.5rem, 5vw, 2.4rem); margin-bottom: 0.6rem; gap: 0.04em; }
+  .badge { font-size: 0.65rem; padding: 0.35rem 0.8rem; }
+  .sub { font-size: 0.9rem; margin-bottom: 1rem; }
+  .proof { margin-bottom: 1.2rem; }
+  .pill { padding: 0.4rem 0.8rem; font-size: 0.7rem; }
+}
