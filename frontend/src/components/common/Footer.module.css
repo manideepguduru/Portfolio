@@ -1,6 +1,6 @@
 .footer {
-  background: linear-gradient(135deg, #0d0805 0%, #1a0f08 50%, #2a1810 100%);
-  border-top: 2px solid rgba(255, 107, 53, 0.2);
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #141a2f 100%);
+  border-top: 2px solid rgba(0, 217, 255, 0.15);
   padding: 5rem 5% 3rem;
   margin-top: 5rem;
   position: relative;
@@ -122,7 +122,7 @@
   border-top: 1px solid rgba(0, 217, 255, 0.1);
   padding-top: 2.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 2rem;
 }

@@ -64,7 +64,6 @@ export default function Footer() {
 
         <div className={styles.bottom}>
           <p>© {new Date().getFullYear()} Guduru Manideep. Built with ☕ and clean code.</p>
-          <Link to="/admin" style={{ color: 'var(--text3)', fontSize: '0.78rem' }}>Admin Panel</Link>
         </div>
       </div>
     </footer>
