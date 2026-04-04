@@ -53,8 +53,11 @@ export interface ServiceDTO {
   description: string;
   icon?: string;
   priceRange?: string;
-  sortOrder: number;
-  active: boolean;
+  techStack?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  sortOrder?: number;
+  active?: boolean;
 }
 
 // ── Contact ──────────────────────────────────────────────────

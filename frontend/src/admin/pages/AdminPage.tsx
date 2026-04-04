@@ -110,6 +110,7 @@ function ProjectsAdmin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState<Partial<Project>>({});
   const [originalData, setOriginalData] = useState<Partial<Project>>({});
 
@@ -132,30 +133,41 @@ function ProjectsAdmin() {
   };
 
   const startEdit = (project: Project) => {
+    setIsCreating(false);
     setEditingId(project.id);
     setFormData({ ...project });
     setOriginalData({ ...project });
   };
 
-  const saveEdit = async (id: number) => {
-    if (!formData.title || !formData.description || !formData.link) {
-      alert('Please fill all fields');
+  const startCreate = () => {
+    setIsCreating(true);
+    setEditingId(null);
+    setFormData({ featured: false, techStack: '', githubUrl: '', liveUrl: '' });
+    setOriginalData({});
+  };
+
+  const saveProject = async () => {
+    if (!formData.title || !formData.description) {
+      alert('Please fill at least title and description');
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/projects/${id}`, {
-        method: 'PUT',
+      const url = isCreating ? `${API_URL}/projects` : `${API_URL}/projects/${editingId}`;
+      const method = isCreating ? 'POST' : 'PUT';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       if (res.ok) {
         setEditingId(null);
+        setIsCreating(false);
         await fetchProjects();
       } else {
-        alert('Failed to update project');
+        alert(`Failed to ${isCreating ? 'create' : 'update'} project`);
       }
     } catch (err) {
-      alert('Failed to update project');
+      alert(`Failed to ${isCreating ? 'create' : 'update'} project`);
       console.error(err);
     }
   };
@@ -175,111 +187,151 @@ function ProjectsAdmin() {
 
   return (
     <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.1)' }}>
-      <h2 style={{ color: '#00d9ff', marginTop: 0 }}>📁 Manage Projects</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h2 style={{ color: '#00d9ff', margin: 0 }}>📁 Manage Projects</h2>
+        <button 
+          onClick={startCreate}
+          style={{ padding: '0.6rem 1.2rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+        >
+          ➕ Create New
+        </button>
+      </div>
       
       {loading && <p style={{ color: '#00d9ff' }}>Loading projects...</p>}
       {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
       
-      {!loading && projects.length === 0 && <p style={{ color: '#a0aec0' }}>No projects found</p>}
+      {!loading && projects.length === 0 && <p style={{ color: '#a0aec0' }}>No projects found. Create the first one!</p>}
       
+      {(editingId || isCreating) && (
+        // Create/Edit Modal
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '2px solid #00d9ff', maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 style={{ color: '#00d9ff', marginTop: 0 }}>{isCreating ? '✨ Create New Project' : '✏️ Edit Project'}</h3>
+            
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Title *</label>
+              <input 
+                type="text" 
+                value={formData.title || ''} 
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+                placeholder="Project title"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Description *</label>
+              <textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                placeholder="Project description"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', minHeight: '80px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '0.9rem' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Tech Stack (comma-separated)</label>
+              <input 
+                type="text" 
+                value={formData.techStack || ''} 
+                onChange={(e) => setFormData({...formData, techStack: e.target.value})}
+                placeholder="React, TypeScript, Node.js"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>GitHub URL</label>
+              <input 
+                type="text" 
+                value={formData.githubUrl || ''} 
+                onChange={(e) => setFormData({...formData, githubUrl: e.target.value})}
+                placeholder="https://github.com/..."
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Live Demo URL</label>
+              <input 
+                type="text" 
+                value={formData.liveUrl || ''} 
+                onChange={(e) => setFormData({...formData, liveUrl: e.target.value})}
+                placeholder="https://demo..."
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00d9ff', cursor: 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.featured || false}
+                  onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                  style={{ cursor: 'pointer', width: '18px', height: '18px' }}
+                />
+                <span>Featured</span>
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+              <button 
+                onClick={saveProject}
+                style={{ flex: 1, padding: '0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+              >
+                ✅ {isCreating ? 'Create Project' : 'Save Changes'}
+              </button>
+              <button 
+                onClick={() => { setEditingId(null); setIsCreating(false); }}
+                style={{ flex: 1, padding: '0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+              >
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {!loading && projects.length > 0 && (
-        <>
-          {editingId ? (
-            // Edit Modal
-            <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '2px solid #00d9ff', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
-                <h3 style={{ color: '#00d9ff', marginTop: 0 }}>✏️ Edit Project</h3>
-                
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Title {hasChanged('title') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.title || ''} 
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('title') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
-                  />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+          {projects.map(p => (
+            <div key={p.id} style={{ backgroundColor: '#141a2f', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <div>
+                <h4 style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontSize: '1rem', wordBreak: 'break-word' }}>{p.title}</h4>
+                <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.8rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{p.description}</p>
+              </div>
+              
+              {p.techStack && (
+                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
+                  {p.techStack.split(',').map((tech, idx) => (
+                    <span key={idx} style={{ backgroundColor: 'rgba(0, 217, 255, 0.15)', color: '#00d9ff', padding: '0.2rem 0.5rem', borderRadius: '3px', fontWeight: 'bold', border: '1px solid rgba(0, 217, 255, 0.3)' }}>
+                      {tech.trim()}
+                    </span>
+                  ))}
                 </div>
+              )}
+              
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
+                {p.featured && <span style={{ backgroundColor: 'rgba(0, 217, 255, 0.2)', color: '#00d9ff', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold' }}>⭐ Featured</span>}
+              </div>
 
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Description {hasChanged('description') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <textarea 
-                    value={formData.description || ''} 
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('description') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', minHeight: '100px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '0.9rem' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Link {hasChanged('link') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.link || ''} 
-                    onChange={(e) => setFormData({...formData, link: e.target.value})}
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('link') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00d9ff', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.featured || false}
-                      onChange={(e) => setFormData({...formData, featured: e.target.checked})}
-                      style={{ cursor: 'pointer', width: '18px', height: '18px' }}
-                    />
-                    <span>Featured {hasChanged('featured') && <span style={{ color: '#ff9500' }}>●</span>}</span>
-                  </label>
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
-                  <button 
-                    onClick={() => saveEdit(editingId!)}
-                    style={{ flex: 1, padding: '0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
-                  >
-                    ✅ Save Changes
-                  </button>
-                  <button 
-                    onClick={() => setEditingId(null)}
-                    style={{ flex: 1, padding: '0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
-                  >
-                    ❌ Cancel
-                  </button>
-                </div>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
+                <button 
+                  onClick={() => startEdit(p)}
+                  style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
+                >
+                  ✏️ Edit
+                </button>
+                <button 
+                  onClick={() => deleteProject(p.id)}
+                  style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
+                >
+                  🗑️ Delete
+                </button>
               </div>
             </div>
-          ) : null}
-
-          {/* Grid View */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
-            {projects.map(p => (
-              <div key={p.id} style={{ backgroundColor: '#141a2f', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                <div>
-                  <h4 style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontSize: '1rem', wordBreak: 'break-word' }}>{p.title}</h4>
-                  <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.8rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{p.description}</p>
-                </div>
-                
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
-                  <span style={{ backgroundColor: 'rgba(0, 217, 255, 0.2)', color: '#00d9ff', padding: '0.3rem 0.6rem', borderRadius: '3px' }}>🔗 {p.featured ? '⭐ Featured' : 'Portfolio'}</span>
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
-                  <button 
-                    onClick={() => startEdit(p)}
-                    style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button 
-                    onClick={() => deleteProject(p.id)}
-                    style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
-                  >
-                    🗑️ Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
     </div>
   );
@@ -290,6 +342,7 @@ function ServicesAdmin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState<Partial<Service>>({});
   const [originalData, setOriginalData] = useState<Partial<Service>>({});
 
@@ -312,30 +365,48 @@ function ServicesAdmin() {
   };
 
   const startEdit = (service: Service) => {
+    setIsCreating(false);
     setEditingId(service.id);
     setFormData({ ...service });
     setOriginalData({ ...service });
   };
 
-  const saveEdit = async (id: number) => {
+  const startCreate = () => {
+    setIsCreating(true);
+    setEditingId(null);
+    setFormData({ active: true, techStack: '', githubUrl: '', liveUrl: '' });
+    setOriginalData({});
+  };
+
+  const saveService = async () => {
     if (!formData.title || !formData.description) {
-      alert('Please fill all fields');
+      alert('Please fill at least title and description');
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/services/${id}`, {
-        method: 'PUT',
+      const url = isCreating ? `${API_URL}/services` : `${API_URL}/services/${editingId}`;
+      const method = isCreating ? 'POST' : 'PUT';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          techStack: formData.techStack || null,
+          githubUrl: formData.githubUrl || null,
+          liveUrl: formData.liveUrl || null,
+          active: formData.active !== undefined ? formData.active : true
+        })
       });
       if (res.ok) {
         setEditingId(null);
+        setIsCreating(false);
         await fetchServices();
       } else {
-        alert('Failed to update service');
+        alert(`Failed to ${isCreating ? 'create' : 'update'} service`);
       }
     } catch (err) {
-      alert('Failed to update service');
+      alert(`Failed to ${isCreating ? 'create' : 'update'} service`);
       console.error(err);
     }
   };
@@ -355,146 +426,169 @@ function ServicesAdmin() {
 
   return (
     <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.1)' }}>
-      <h2 style={{ color: '#00d9ff', marginTop: 0 }}>🛠️ Manage Services</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h2 style={{ color: '#00d9ff', margin: 0 }}>🛠️ Manage Services</h2>
+        <button 
+          onClick={startCreate}
+          style={{ padding: '0.6rem 1.2rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+        >
+          ➕ Create New
+        </button>
+      </div>
       
       {loading && <p style={{ color: '#00d9ff' }}>Loading services...</p>}
       {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
       
-      {!loading && services.length === 0 && <p style={{ color: '#a0aec0' }}>No services found</p>}
+      {!loading && services.length === 0 && <p style={{ color: '#a0aec0' }}>No services found. Create the first one!</p>}
       
+      {(editingId || isCreating) && (
+        // Create/Edit Modal
+        <div onClick={() => { setEditingId(null); setIsCreating(false); }} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '2px solid #00d9ff', maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 style={{ color: '#00d9ff', margin: 0 }}>{isCreating ? '✨ Create New Service' : '✏️ Edit Service'}</h3>
+              <button onClick={() => { setEditingId(null); setIsCreating(false); }} style={{ backgroundColor: 'transparent', border: 'none', color: '#a0aec0', cursor: 'pointer', fontSize: '1.5rem' }}>✕</button>
+            </div>
+            
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Title * {hasChanged('title') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+              <input 
+                type="text" 
+                value={formData.title || ''} 
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+                placeholder="Service title"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('title') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Description * {hasChanged('description') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+              <textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                placeholder="Service description"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('description') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', minHeight: '80px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '0.9rem' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Tech Stack (comma-separated) {hasChanged('techStack') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+              <input 
+                type="text" 
+                value={formData.techStack || ''} 
+                onChange={(e) => setFormData({...formData, techStack: e.target.value})}
+                placeholder="React, TypeScript, Node.js"
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('techStack') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>GitHub URL {hasChanged('githubUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+              <input 
+                type="text" 
+                value={formData.githubUrl || ''} 
+                onChange={(e) => setFormData({...formData, githubUrl: e.target.value})}
+                placeholder="https://github.com/..."
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('githubUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Live Demo URL {hasChanged('liveUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
+              <input 
+                type="text" 
+                value={formData.liveUrl || ''} 
+                onChange={(e) => setFormData({...formData, liveUrl: e.target.value})}
+                placeholder="https://demo..."
+                style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('liveUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00d9ff', cursor: 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.active || false}
+                  onChange={(e) => setFormData({...formData, active: e.target.checked})}
+                  style={{ cursor: 'pointer', width: '18px', height: '18px' }}
+                />
+                <span>Active {hasChanged('active') && <span style={{ color: '#ff9500' }}>●</span>}</span>
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+              <button 
+                onClick={saveService}
+                style={{ flex: 1, padding: '0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+              >
+                ✅ {isCreating ? 'Create Service' : 'Save Changes'}
+              </button>
+              <button 
+                onClick={() => { setEditingId(null); setIsCreating(false); }}
+                style={{ flex: 1, padding: '0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+              >
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {!loading && services.length > 0 && (
-        <>
-          {editingId ? (
-            // Edit Modal
-            <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-              <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '2px solid #00d9ff', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
-                <h3 style={{ color: '#00d9ff', marginTop: 0 }}>✏️ Edit Service</h3>
-                
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Title {hasChanged('title') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.title || ''} 
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('title') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box' }}
-                  />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+          {services.map(s => (
+            <div key={s.id} style={{ backgroundColor: '#141a2f', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <div>
+                <h4 style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontSize: '1rem', wordBreak: 'break-word' }}>{s.title}</h4>
+                <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.8rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.description}</p>
+              </div>
+              
+              {s.techStack && (
+                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
+                  {s.techStack.split(',').map((tech, idx) => (
+                    <span key={idx} style={{ backgroundColor: 'rgba(0, 217, 255, 0.15)', color: '#00d9ff', padding: '0.2rem 0.5rem', borderRadius: '3px', fontWeight: 'bold', border: '1px solid rgba(0, 217, 255, 0.3)' }}>
+                      {tech.trim()}
+                    </span>
+                  ))}
                 </div>
+              )}
+              
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
+                {s.githubUrl && (
+                  <a href={s.githubUrl} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: 'rgba(255, 149, 0, 0.2)', color: '#ff9500', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold', textDecoration: 'none', border: '1px solid rgba(255, 149, 0, 0.5)' }}>
+                    🔗 GitHub
+                  </a>
+                )}
+                {s.liveUrl && (
+                  <a href={s.liveUrl} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: 'rgba(0, 217, 255, 0.2)', color: '#00d9ff', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold', textDecoration: 'none', border: '1px solid rgba(0, 217, 255, 0.4)' }}>
+                    🌐 Live Demo
+                  </a>
+                )}
+              </div>
+              
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
+                <span style={{ backgroundColor: s.active ? 'rgba(0, 217, 255, 0.2)' : 'rgba(160, 174, 192, 0.2)', color: s.active ? '#00d9ff' : '#a0aec0', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold' }}>
+                  {s.active ? '🟢 Active' : '⚫ Inactive'}
+                </span>
+              </div>
 
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Description {hasChanged('description') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <textarea 
-                    value={formData.description || ''} 
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('description') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', minHeight: '100px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '0.9rem' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Tech Stack (comma-separated) {hasChanged('techStack') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.techStack || ''} 
-                    onChange={(e) => setFormData({...formData, techStack: e.target.value})}
-                    placeholder="e.g., React, TypeScript, Node.js"
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('techStack') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>GitHub URL {hasChanged('githubUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.githubUrl || ''} 
-                    onChange={(e) => setFormData({...formData, githubUrl: e.target.value})}
-                    placeholder="https://github.com/..."
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('githubUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'block', color: '#00d9ff', marginBottom: '0.3rem', fontSize: '0.9rem', fontWeight: 'bold' }}>Live Demo URL {hasChanged('liveUrl') && <span style={{ color: '#ff9500' }}>●</span>}</label>
-                  <input 
-                    type="text" 
-                    value={formData.liveUrl || ''} 
-                    onChange={(e) => setFormData({...formData, liveUrl: e.target.value})}
-                    placeholder="https://demo..."
-                    style={{ width: '100%', padding: '0.7rem', backgroundColor: '#0f1419', color: '#00d9ff', border: hasChanged('liveUrl') ? '2px solid #ff9500' : '1px solid #00d9ff', borderRadius: '4px', boxSizing: 'border-box', fontSize: '0.9rem' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00d9ff', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.isActive || false}
-                      onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-                      style={{ cursor: 'pointer', width: '18px', height: '18px' }}
-                    />
-                    <span>Active {hasChanged('isActive') && <span style={{ color: '#ff9500' }}>●</span>}</span>
-                  </label>
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
-                  <button 
-                    onClick={() => saveEdit(editingId!)}
-                    style={{ flex: 1, padding: '0.8rem', backgroundColor: '#00d9ff', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
-                  >
-                    ✅ Save Changes
-                  </button>
-                  <button 
-                    onClick={() => setEditingId(null)}
-                    style={{ flex: 1, padding: '0.8rem', backgroundColor: '#a0aec0', color: '#0f1419', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
-                  >
-                    ❌ Cancel
-                  </button>
-                </div>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
+                <button 
+                  onClick={() => startEdit(s)}
+                  style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
+                >
+                  ✏️ Edit
+                </button>
+                <button 
+                  onClick={() => deleteService(s.id)}
+                  style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
+                >
+                  🗑️ Delete
+                </button>
               </div>
             </div>
-          ) : null}
-
-          {/* Grid View */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
-            {services.map(s => (
-              <div key={s.id} style={{ backgroundColor: '#141a2f', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                <div>
-                  <h4 style={{ margin: '0 0 0.3rem 0', color: '#00d9ff', fontSize: '1rem', wordBreak: 'break-word' }}>{s.title}</h4>
-                  <p style={{ margin: 0, color: '#a0aec0', fontSize: '0.8rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.description}</p>
-                </div>
-                
-                {s.techStack && (
-                  <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
-                    {s.techStack.split(',').map((tech, idx) => (
-                      <span key={idx} style={{ backgroundColor: 'rgba(0, 217, 255, 0.15)', color: '#00d9ff', padding: '0.2rem 0.5rem', borderRadius: '3px', fontWeight: 'bold', border: '1px solid rgba(0, 217, 255, 0.3)' }}>
-                        {tech.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.75rem' }}>
-                  <span style={{ backgroundColor: s.isActive || s.active ? 'rgba(0, 217, 255, 0.2)' : 'rgba(160, 174, 192, 0.2)', color: s.isActive || s.active ? '#00d9ff' : '#a0aec0', padding: '0.3rem 0.6rem', borderRadius: '3px', fontWeight: 'bold' }}>
-                    {s.isActive || s.active ? '🟢 Active' : '⚫ Inactive'}
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
-                  <button 
-                    onClick={() => startEdit(s)}
-                    style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff9500', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button 
-                    onClick={() => deleteService(s.id)}
-                    style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem' }}
-                  >
-                    🗑️ Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
     </div>
   );
