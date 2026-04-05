@@ -1,14 +1,13 @@
 -- ============================================================
--- Portfolio Database Schema
--- Run this file once in MySQL before starting the application
+-- Portfolio Database Schema (PostgreSQL)
+-- Run this in your Render PostgreSQL database to seed data.
+-- Tables are auto-created by Hibernate (ddl-auto=update),
+-- so only the INSERT statements are strictly needed.
 -- ============================================================
-
-CREATE DATABASE IF NOT EXISTS portfolio_db;
-USE portfolio_db;
 
 -- ── Projects ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS projects (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id          BIGSERIAL     PRIMARY KEY,
     title       VARCHAR(200)  NOT NULL,
     description TEXT          NOT NULL,
     tech_stack  VARCHAR(500)  NOT NULL,
@@ -17,33 +16,33 @@ CREATE TABLE IF NOT EXISTS projects (
     image_url   VARCHAR(500),
     featured    BOOLEAN       NOT NULL DEFAULT FALSE,
     sort_order  INT           NOT NULL DEFAULT 0,
-    created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at  TIMESTAMP     NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
 -- ── Services ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS services (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id          BIGSERIAL     PRIMARY KEY,
     title       VARCHAR(200)  NOT NULL,
     description TEXT          NOT NULL,
     icon        VARCHAR(100),
     price_range VARCHAR(100),
     sort_order  INT           NOT NULL DEFAULT 0,
     active      BOOLEAN       NOT NULL DEFAULT TRUE,
-    created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at  TIMESTAMP     NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
 -- ── Contacts ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS contacts (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id          BIGSERIAL     PRIMARY KEY,
     name        VARCHAR(150)  NOT NULL,
     email       VARCHAR(255)  NOT NULL,
     phone       VARCHAR(20),
     subject     VARCHAR(300)  NOT NULL,
     message     TEXT          NOT NULL,
     read_status BOOLEAN       NOT NULL DEFAULT FALSE,
-    created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
 -- ============================================================

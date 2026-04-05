@@ -6,8 +6,20 @@ services:
     buildCommand: cd backend && mvn clean package -DskipTests
     startCommand: java -jar backend/target/portfolio-backend-1.0.0.jar
     envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: ${DATABASE_URL}
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: portfolio-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: portfolio-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: portfolio-db
+          property: database
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: portfolio-db
@@ -18,16 +30,10 @@ services:
           property: password
       - key: PORT
         value: "8080"
-
-  - type: web
-    name: portfolio-frontend
-    runtime: node
-    plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: npm run preview
-    envVars:
-      - key: VITE_API_URL
-        value: https://portfolio-backend.onrender.com/api
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://portfolio-delta-murex-eomyf8lxd8.vercel.app
+      - key: JWT_SECRET
+        generateValue: true
 
 databases:
   - name: portfolio-db
