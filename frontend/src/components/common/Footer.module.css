@@ -14,7 +14,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+  background: linear-gradient(90deg, transparent, #00d9ff, transparent);
   opacity: 0.5;
 }
 
@@ -31,7 +31,7 @@
   gap: 4rem;
   margin-bottom: 4rem;
   padding-bottom: 3rem;
-  border-bottom: 2px solid rgba(255, 107, 53, 0.1);
+  border-bottom: 2px solid rgba(0, 217, 255, 0.1);
 }
 
 .logo {
@@ -41,16 +41,12 @@
   display: block;
   margin-bottom: 1rem;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ff6b35, #ff1493, #ffd700);
+  background: linear-gradient(135deg, #00d9ff, #3498db);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .logo span { 
-  background: linear-gradient(135deg, #ffd700, #ff1493);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   -webkit-text-fill-color: #00d9ff;
 }
 .brand p { 

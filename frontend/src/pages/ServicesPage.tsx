@@ -102,7 +102,7 @@ export default function ServicesPage() {
             <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className="btn-primary">
               💬 WhatsApp Me
             </a>
-            <a href="https://softwarekattubanisa@gmail.com" className="btn-secondary">
+            <a href="mailto:softwarekattubanisa@gmail.com" className="btn-secondary">
               📧 Send Email
             </a>
           </div>
