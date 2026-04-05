@@ -4,16 +4,24 @@ import styles from './ServiceCard.module.css';
 
 interface Props { service: Service; }
 
+function formatPrice(range: string): string {
+  const parts = range.split('-').map(p => p.trim());
+  const fmt = (n: string) => {
+    const num = parseInt(n.replace(/[^0-9]/g, ''), 10);
+    return isNaN(num) ? n : `\u20B9${num.toLocaleString('en-IN')}`;
+  };
+  return parts.length === 2 ? `${fmt(parts[0])} \u2013 ${fmt(parts[1])}` : range;
+}
+
 export default function ServiceCard({ service }: Props) {
   const techs = service.techStack ? service.techStack.split(',').map(t => t.trim()) : [];
 
   return (
     <div className={styles.card}>
-      {service.icon && <div className={styles.icon}>{service.icon}</div>}
       <h3 className={styles.title}>{service.title}</h3>
       <p className={styles.desc}>{service.description}</p>
       
-      {service.priceRange && <p className={styles.price}>{service.priceRange}</p>}
+      {service.priceRange && <p className={styles.price}>{formatPrice(service.priceRange)}</p>}
 
       {techs.length > 0 && (
         <div className={styles.tags}>
