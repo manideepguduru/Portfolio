@@ -39,7 +39,7 @@ export interface Service {
   description: string;
   icon: string | null;
   priceRange: string | null;
-  techStack: string | null;       // comma-separated string
+  techStack: string | null;
   githubUrl: string | null;
   liveUrl: string | null;
   sortOrder: number;
@@ -53,11 +53,8 @@ export interface ServiceDTO {
   description: string;
   icon?: string;
   priceRange?: string;
-  techStack?: string;
-  githubUrl?: string;
-  liveUrl?: string;
-  sortOrder?: number;
-  active?: boolean;
+  sortOrder: number;
+  active: boolean;
 }
 
 // ── Contact ──────────────────────────────────────────────────

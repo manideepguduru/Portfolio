@@ -6,9 +6,12 @@ interface Project {
   id: number;
   title: string;
   description: string;
-  link: string;
-  imageUrl: string;
+  techStack: string;
+  githubUrl: string | null;
+  liveUrl: string | null;
+  imageUrl: string | null;
   featured: boolean;
+  sortOrder: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -112,7 +115,6 @@ function ProjectsAdmin() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState<Partial<Project>>({});
-  const [originalData, setOriginalData] = useState<Partial<Project>>({});
 
   useEffect(() => {
     fetchProjects();
@@ -136,14 +138,12 @@ function ProjectsAdmin() {
     setIsCreating(false);
     setEditingId(project.id);
     setFormData({ ...project });
-    setOriginalData({ ...project });
   };
 
   const startCreate = () => {
     setIsCreating(true);
     setEditingId(null);
     setFormData({ featured: false, techStack: '', githubUrl: '', liveUrl: '' });
-    setOriginalData({});
   };
 
   const saveProject = async () => {
@@ -182,8 +182,6 @@ function ProjectsAdmin() {
       }
     }
   };
-
-  const hasChanged = (key: string) => formData[key as keyof typeof formData] !== originalData[key as keyof typeof originalData];
 
   return (
     <div style={{ backgroundColor: '#1a1f2e', padding: '2rem', borderRadius: '8px', border: '1px solid rgba(0, 217, 255, 0.1)' }}>
