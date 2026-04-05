@@ -8,7 +8,6 @@ import ServiceCard      from '../components/common/ServiceCard';
 import ContactForm      from '../components/sections/ContactForm';
 import { Spinner, ErrorMessage } from '../components/common/UIHelpers';
 import { projectApi, serviceApi } from '../services/api';
-import { useScrollReveal } from '../hooks/useScrollReveal';
 import type { Project, Service } from '../types';
 import styles from './HomePage.module.css';
 
@@ -20,11 +19,8 @@ export default function HomePage() {
   const [errorP, setErrorP]           = useState('');
   const [errorS, setErrorS]           = useState('');
 
-  const { ref: servicesRef, isVisible: servicesVisible } = useScrollReveal({ threshold: 0.2 });
-  const { ref: projectsRef, isVisible: projectsVisible } = useScrollReveal({ threshold: 0.2 });
-
   useEffect(() => {
-    projectApi.getFeatured()
+    projectApi.getAll()
       .then(r => setProjects(r.data))
       .catch(() => setErrorP('Could not load projects.'))
       .finally(() => setLoadingP(false));
@@ -41,12 +37,8 @@ export default function HomePage() {
       <StatsSection />
       <AboutSection />
 
-      {/* ── Services preview ─────────────────────────────── */}
-      <section 
-        ref={servicesRef}
-        className={`${styles.servicesSection} section ${servicesVisible ? 'scroll-reveal' : ''}`} 
-        id="services"
-      >
+      {/* ── Services ─────────────────────────────────────── */}
+      <section className={styles.servicesSection} id="services">
         <div className={styles.inner}>
           <div className="text-center" style={{ marginBottom: '3rem' }}>
             <span className="section-tag">What I Offer</span>
@@ -61,25 +53,18 @@ export default function HomePage() {
           {errorS   && <ErrorMessage message={errorS} />}
           {!loadingS && !errorS && (
             <div className={styles.servicesGrid}>
-              {services.slice(0, 6).map(s => <ServiceCard key={s.id} service={s} />)}
+              {services.map(s => <ServiceCard key={s.id} service={s} />)}
             </div>
           )}
-          <div className="text-center" style={{ marginTop: '2.5rem' }}>
-            <Link to="/services" className="btn-secondary">View All Services →</Link>
-          </div>
         </div>
       </section>
 
-      {/* ── Projects preview ─────────────────────────────── */}
-      <section 
-        ref={projectsRef}
-        className={`${styles.projectsSection} section ${projectsVisible ? 'scroll-reveal' : ''}`} 
-        id="projects"
-      >
+      {/* ── Projects ─────────────────────────────────────── */}
+      <section className={styles.projectsSection} id="projects">
         <div className={styles.inner}>
           <div className="text-center" style={{ marginBottom: '3rem' }}>
             <span className="section-tag">Portfolio</span>
-            <h2 className="section-title">Featured Projects</h2>
+            <h2 className="section-title">My Projects</h2>
             <p className="section-sub">Real projects solving real problems.</p>
           </div>
 
@@ -90,9 +75,6 @@ export default function HomePage() {
               {projects.map(p => <ProjectCard key={p.id} project={p} />)}
             </div>
           )}
-          <div className="text-center" style={{ marginTop: '2.5rem' }}>
-            <Link to="/projects" className="btn-secondary">View All Projects →</Link>
-          </div>
         </div>
       </section>
 

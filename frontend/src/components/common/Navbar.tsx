@@ -1,21 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useActiveSection } from '../../hooks/useActiveSection';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Navbar.module.css';
 
 const links = [
-  { to: '/', label: 'Home', section: 'hero' },
-  { to: '/#services', label: 'Services', section: 'services' },
-  { to: '/#projects', label: 'Projects', section: 'projects' },
-  { to: '/contact', label: 'Contact', section: '' },
+  { to: '/', label: 'Home' },
+  { to: '/services', label: 'Services' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const activeSection = useActiveSection();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -23,30 +20,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  // Check if link is active - either by route or by visible section on homepage
   const isLinkActive = (link: typeof links[0]): boolean => {
-    // If on homepage and link has a section, check if section is visible
-    if (location.pathname === '/' && link.section) {
-      return activeSection === link.section;
-    }
-    // Special case: Home link with no other section visible (at top of page)
-    if (link.to === '/' && location.pathname === '/' && !activeSection) {
-      return true;
-    }
-    // Otherwise use standard route matching for Contact page
-    return location.pathname === link.to && location.pathname !== '/';
-  };
-
-  // Handle smooth scroll to section on homepage
-  const handleSectionClick = (e: React.MouseEvent, link: typeof links[0]) => {
-    if (location.pathname === '/' && link.section) {
-      e.preventDefault();
-      const section = document.getElementById(link.section);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-        setMenuOpen(false);
-      }
-    }
+    if (link.to === '/') return location.pathname === '/';
+    return location.pathname === link.to;
   };
 
   return (
@@ -58,28 +34,13 @@ export default function Navbar() {
       {/* Desktop links */}
       <ul className={styles.links}>
         {links.map(l => (
-          <li key={l.to + l.section}>
-            {l.to !== '/contact' ? (
-              <a
-                href={l.to}
-                onClick={(e) => handleSectionClick(e, l)}
-                className={isLinkActive(l) ? `${styles.link} ${styles.active}` : styles.link}
-              >
-                {l.label}
-              </a>
-            ) : (
-              <a
-                href={l.to}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/contact');
-                  setMenuOpen(false);
-                }}
-                className={isLinkActive(l) ? `${styles.link} ${styles.active}` : styles.link}
-              >
-                {l.label}
-              </a>
-            )}
+          <li key={l.to}>
+            <Link
+              to={l.to}
+              className={isLinkActive(l) ? `${styles.link} ${styles.active}` : styles.link}
+            >
+              {l.label}
+            </Link>
           </li>
         ))}
       </ul>
@@ -103,29 +64,14 @@ export default function Navbar() {
       {menuOpen && (
         <div className={styles.mobile}>
           {links.map(l => (
-            <div key={l.to + l.section}>
-              {l.to !== '/contact' ? (
-                <a
-                  href={l.to}
-                  onClick={(e) => handleSectionClick(e, l)}
-                  className={isLinkActive(l) ? `${styles.mobileLink} ${styles.active}` : styles.mobileLink}
-                >
-                  {l.label}
-                </a>
-              ) : (
-                <a
-                  href={l.to}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/contact');
-                    setMenuOpen(false);
-                  }}
-                  className={isLinkActive(l) ? `${styles.mobileLink} ${styles.active}` : styles.mobileLink}
-                >
-                  {l.label}
-                </a>
-              )}
-            </div>
+            <Link
+              key={l.to}
+              to={l.to}
+              className={isLinkActive(l) ? `${styles.mobileLink} ${styles.active}` : styles.mobileLink}
+              onClick={() => setMenuOpen(false)}
+            >
+              {l.label}
+            </Link>
           ))}
           <Link to="/contact" className="btn-primary" style={{ marginTop: '0.5rem' }} onClick={() => setMenuOpen(false)}>
             Hire Me
