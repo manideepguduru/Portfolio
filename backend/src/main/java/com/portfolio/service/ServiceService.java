@@ -40,6 +40,9 @@ public class ServiceService {
                 .description(dto.getDescription())
                 .icon(dto.getIcon())
                 .priceRange(dto.getPriceRange())
+                .techStack(dto.getTechStack())
+                .githubUrl(dto.getGithubUrl())
+                .liveUrl(dto.getLiveUrl())
                 .sortOrder(dto.getSortOrder() != null ? dto.getSortOrder() : 0)
                 .active(dto.getActive() != null ? dto.getActive() : true)
                 .build();
@@ -53,6 +56,9 @@ public class ServiceService {
         existing.setDescription(dto.getDescription());
         existing.setIcon(dto.getIcon());
         existing.setPriceRange(dto.getPriceRange());
+        existing.setTechStack(dto.getTechStack());
+        existing.setGithubUrl(dto.getGithubUrl());
+        existing.setLiveUrl(dto.getLiveUrl());
         existing.setSortOrder(dto.getSortOrder() != null ? dto.getSortOrder() : 0);
         existing.setActive(dto.getActive() != null ? dto.getActive() : true);
         return serviceRepository.save(existing);
