@@ -31,7 +31,7 @@ services:
       - key: PORT
         value: "8080"
       - key: CORS_ALLOWED_ORIGINS
-        value: https://portfolio-delta-murex-eomyf8lxd8.vercel.app
+        value: https://manideepguduru.com,https://www.manideepguduru.com,https://portfolio-delta-murex-eomyf8lxd8.vercel.app
       - key: JWT_SECRET
         generateValue: true
 

@@ -1,6 +1,6 @@
 import { adminAuth } from '../utils/auth';
 
-const API_URL = import.meta.env.VITE_ADMIN_API_URL || 'http://localhost:8080/api/admin';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 export const adminApiClient = {
   async get(endpoint: string) {
