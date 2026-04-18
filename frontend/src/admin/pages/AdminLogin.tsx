@@ -14,10 +14,9 @@ export default function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => v
     setLoading(true);
 
     try {
-      // Simple password verification (no backend API call needed for demo)
-      const correctPassword = 'Infosys@19';
+      const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD || '';
       
-      if (password !== correctPassword) {
+      if (!correctPassword || password !== correctPassword) {
         throw new Error('Invalid password');
       }
 
@@ -76,9 +75,6 @@ export default function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => v
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        <p style={{ textAlign: 'center', marginTop: '2rem', color: '#78849c', fontSize: '0.85rem' }}>
-          Demo credentials are displayed in the README
-        </p>
       </div>
     </div>
   );

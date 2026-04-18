@@ -23,6 +23,7 @@ public class ContactService {
         Contact contact = Contact.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())
+                .phone(dto.getPhone())
                 .subject(dto.getSubject())
                 .message(dto.getMessage())
                 .readStatus(false)

@@ -198,6 +198,7 @@ h1, h2, h3, h4, h5 {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  min-height: 44px;
   background: linear-gradient(135deg, #00d8ff, #3498db);
   color: #fff;
   padding: 1.1rem 2.8rem;
@@ -239,6 +240,7 @@ h1, h2, h3, h4, h5 {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  min-height: 44px;
   background: linear-gradient(135deg, #00d9ff, #3498db);
   color: #fff;
   padding: 1.1rem 2.8rem;
