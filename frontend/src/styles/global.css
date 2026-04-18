@@ -462,13 +462,15 @@ h1, h2, h3, h4, h5 {
   .btn-primary, .btn-secondary { 
     padding: 0.8rem 1.5rem;
     font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+    min-height: 44px; /* Touch-friendly */
   }
   
   .form-group input,
   .form-group textarea,
   .form-group select {
-    font-size: 16px;
+    font-size: 16px; /* Prevent zoom on iOS */
     padding: 0.8rem 1rem;
+    min-height: 44px;
   }
   
   .form-group select {
@@ -489,6 +491,9 @@ h1, h2, h3, h4, h5 {
     padding: 0.75rem 1.2rem;
     font-size: 0.85rem;
     gap: 0.4rem;
+    min-height: 44px;
+    width: 100%; /* Full width on mobile */
+    justify-content: center;
   }
   
   .form-group { margin-bottom: 1rem; }
@@ -498,6 +503,7 @@ h1, h2, h3, h4, h5 {
   .form-group select {
     font-size: 16px;
     padding: 0.75rem 0.9rem;
+    min-height: 44px;
   }
   .form-group textarea { min-height: 100px; }
   
@@ -511,7 +517,14 @@ h1, h2, h3, h4, h5 {
   .section-title { margin-bottom: 0.5rem; }
   .section-tag { font-size: 0.65rem; margin-bottom: 0.6rem; }
   
-  .btn-primary, .btn-secondary { padding: 0.65rem 1rem; font-size: 0.75rem; }
+  .btn-primary, .btn-secondary { 
+    padding: 0.65rem 1rem; 
+    font-size: 0.75rem;
+    min-height: 44px;
+  }
   
   h1, h2, h3, h4, h5 { letter-spacing: -0.01em; }
+  
+  /* Better touch targets */
+  a, button { min-height: 44px; min-width: 44px; }
 }

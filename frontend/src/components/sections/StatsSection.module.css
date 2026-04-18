@@ -52,8 +52,29 @@
 }
 
 @media (max-width: 768px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+  .section { padding: 3rem 5%; }
+  .heading { margin-bottom: 2.5rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 1px; }
+  .card { padding: 2rem 1rem; }
+  .icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+  .num { font-size: 2.2rem; }
+  .label { font-size: 0.85rem; }
 }
+
+@media (max-width: 600px) {
+  .section { padding: 2.5rem 4%; }
+  .heading { margin-bottom: 2rem; }
+  .card { padding: 1.8rem 1rem; }
+  .icon { font-size: 1.6rem; }
+  .num { font-size: 2rem; }
+  .label { font-size: 0.8rem; }
+}
+
 @media (max-width: 480px) {
+  .section { padding: 2rem 4%; }
   .grid { grid-template-columns: 1fr; }
+  .card { padding: 1.5rem 1rem; }
+  .icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .num { font-size: 1.8rem; }
+  .label { font-size: 0.75rem; }
 }

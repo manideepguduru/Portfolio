@@ -41,9 +41,26 @@
 }
 
 @media (max-width: 768px) {
+  .page { padding-top: 60px; }
   .grid { grid-template-columns: 1fr; gap: 1.2rem; }
   .hero { padding: 2rem 5%; }
   .inner { padding: 1.5rem 5%; }
-  .tabs { gap: 0.5rem; }
-  .tab { padding: 0.5rem 1rem; font-size: 0.8rem; }
+  .tabs { gap: 0.5rem; margin-bottom: 1.5rem; }
+  .tab { padding: 0.5rem 1rem; font-size: 0.8rem; min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  .page { padding-top: 55px; }
+  .hero { padding: 1.5rem 4%; }
+  .inner { padding: 1.2rem 4%; }
+  .tabs { gap: 0.4rem; margin-bottom: 1.2rem; justify-content: center; }
+  .tab { padding: 0.45rem 0.9rem; font-size: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .page { padding-top: 50px; }
+  .hero { padding: 1.2rem 4%; }
+  .inner { padding: 1rem 4%; }
+  .tabs { flex-direction: column; align-items: center; gap: 0.3rem; }
+  .tab { width: 100%; max-width: 200px; }
 }

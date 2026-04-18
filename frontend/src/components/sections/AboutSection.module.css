@@ -118,3 +118,49 @@
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; gap: 4rem; }
 }
+
+@media (max-width: 768px) {
+  .section { padding: 3rem 5%; }
+  .grid { gap: 3rem; }
+  .text p { font-size: 0.9rem; margin-bottom: 1rem; }
+  .quote { padding: 1.2rem 1.4rem; margin: 1.5rem 0; font-size: 0.9rem; }
+  .actions { gap: 0.8rem; margin-top: 1.5rem; }
+  .actions .btn-primary, .actions .btn-secondary { flex: 1; min-height: 44px; }
+  
+  .card { padding: 1.5rem; }
+  .skills { gap: 0.6rem; }
+  .skill { font-size: 0.75rem; padding: 0.35rem 0.8rem; }
+  
+  .offerings { gap: 1rem; }
+  .offer { padding: 1rem; gap: 0.8rem; }
+  .offerIcon { width: 40px; height: 40px; font-size: 1.4rem; }
+  .offer h4 { font-size: 0.9rem; }
+  .offer p { font-size: 0.8rem; }
+}
+
+@media (max-width: 600px) {
+  .section { padding: 2.5rem 4%; }
+  .grid { gap: 2.5rem; }
+  .text p { font-size: 0.85rem; line-height: 1.7; }
+  .quote { padding: 1rem; margin: 1.2rem 0; font-size: 0.85rem; }
+  .actions { flex-direction: column; gap: 0.6rem; }
+  .actions .btn-primary, .actions .btn-secondary { width: 100%; }
+  
+  .right { gap: 1.5rem; }
+  .card { padding: 1.2rem; }
+  .skills { gap: 0.5rem; margin-top: 0.8rem; }
+  .skill { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+  
+  .offerings { gap: 0.8rem; }
+  .offer { padding: 0.9rem; flex-direction: column; text-align: center; gap: 0.6rem; }
+  .offerIcon { width: 44px; height: 44px; font-size: 1.3rem; align-self: center; }
+  .offer h4 { font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .offer p { font-size: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .section { padding: 2rem 4%; }
+  .grid { gap: 2rem; }
+  .text p { font-size: 0.8rem; }
+  .quote { padding: 0.8rem 1rem; margin: 1rem 0; font-size: 0.8rem; }
+}
