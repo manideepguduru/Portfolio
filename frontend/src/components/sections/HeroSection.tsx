@@ -65,7 +65,7 @@ export default function HeroSection() {
         </p>
 
         <div className={styles.proof}>
-          <div className={styles.pill}>📸 <strong>17.1K+</strong> Instagram Followers</div>
+          <div className={styles.pill}>� <strong>50+</strong> Projects Delivered</div>
           <div className={styles.pill}>👁 <strong>745K+</strong> Monthly Views</div>
         </div>
 

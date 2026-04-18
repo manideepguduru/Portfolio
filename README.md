@@ -180,14 +180,42 @@ VITE_API_URL=https://your-backend-render.onrender.com/api
 
 ### Backend to Render
 
-1. Create `render.yaml` in project root (already included)
+1. Use the provided `render.yaml` configuration (optimized for free tier)
 2. Connect repository to Render
-3. Set environment variables:
+3. Set environment variables in Render dashboard:
 ```
-DATABASE_URL=mysql://user:pass@host:3306/portfolio_db
 SPRING_PROFILES_ACTIVE=production
-JWT_SECRET=your-secret-key-change-this
+CORS_ALLOWED_ORIGINS=https://your-vercel-domain.vercel.app
+JWT_SECRET=your-secure-random-jwt-secret
 ```
+
+### Performance Optimizations Applied
+
+#### Frontend
+- ✅ Code splitting with manual chunks (vendor, router, ui)
+- ✅ Terser minification with console/debugger removal
+- ✅ Optimized bundle sizes and loading
+- ✅ Mobile-responsive design
+
+#### Backend
+- ✅ Optimized JVM flags for low memory (-Xmx256m, -Xms128m)
+- ✅ G1GC garbage collector with 200ms max pause
+- ✅ Connection pooling tuned for free tier (max 3 connections)
+- ✅ Response compression enabled
+- ✅ Reduced logging levels (WARN instead of INFO)
+- ✅ Database batch operations enabled
+
+#### Database
+- ✅ PostgreSQL with optimized connection settings
+- ✅ HikariCP pool configured for Render free tier
+- ✅ Batch inserts/updates for better performance
+
+### Render Free Tier Limitations
+- ⚠️ **512MB RAM limit** - JVM optimized to use max 256MB
+- ⚠️ **Slow cold starts** - Consider upgrading to paid plan for better performance
+- ⚠️ **30-second timeout** - All optimizations applied to keep responses fast
+
+For better performance, consider upgrading to Render's paid plans ($7/month starter plan).
 
 ---
 
@@ -243,19 +271,35 @@ JWT_SECRET=your-secret-key-change-this
 
 ## 📝 Environment Files
 
-### Frontend (`.env.example`)
+### ⚠️ Security Warning
+**NEVER commit real credentials to git!** The `.env.example` files contain placeholder values only.
+
+### Frontend (`.env.local.example`)
 ```
 VITE_API_URL=http://localhost:8080/api
 VITE_ADMIN_API_URL=http://localhost:8080/api/admin
 ```
 
-### Backend (`application.properties`)
+### Backend (`.env.example`)
 ```
-spring.datasource.url=jdbc:mysql://localhost:3306/portfolio_db
-spring.datasource.username=root
-spring.datasource.password=root
-spring.jpa.hibernate.ddl-auto=validate
+SPRING_DATASOURCE_URL=postgresql://your_db_user:your_db_password@your_db_host/your_db_name
+SPRING_DATASOURCE_USERNAME=your_db_username
+SPRING_DATASOURCE_PASSWORD=your_db_password
+CORS_ALLOWED_ORIGINS=https://your-frontend-domain.vercel.app
+JWT_SECRET=your-secure-jwt-secret-here
 ```
+
+### Setting up Environment Variables
+
+1. **Copy the example files:**
+   ```bash
+   cp .env.example .env
+   cp frontend/.env.local.example frontend/.env.local
+   ```
+
+2. **Fill in your actual values** (database credentials, API keys, etc.)
+
+3. **Never commit `.env` files** - they're in `.gitignore`
 
 ---
 

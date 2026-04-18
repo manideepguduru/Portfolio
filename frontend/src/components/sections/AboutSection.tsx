@@ -38,8 +38,8 @@ export default function AboutSection() {
               confidently — through modern technology and practical solutions."
             </blockquote>
             <p>
-              Beyond my corporate role I've built a community of <strong>15,000+ people on
-              Instagram</strong> sharing tech, career, and web development content.
+              Beyond my corporate role I've built a community of <strong>15,000+ people across
+              social platforms</strong> sharing tech, career, and web development content.
             </p>
             <div className={styles.actions}>
               <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className="btn-primary">

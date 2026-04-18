@@ -3,8 +3,8 @@ services:
     name: portfolio-backend
     runtime: java
     plan: free
-    buildCommand: cd backend && mvn clean package -DskipTests
-    startCommand: java -jar backend/target/portfolio-backend-1.0.0.jar
+    buildCommand: cd backend && mvn clean package -DskipTests -Dmaven.compiler.source=17 -Dmaven.compiler.target=17
+    startCommand: java -Xmx256m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar backend/target/portfolio-backend-1.0.0.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
