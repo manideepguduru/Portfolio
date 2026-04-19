@@ -22,8 +22,8 @@ public class ContactDTO {
     private String email;
 
     @Pattern(
-        regexp = "^(\\+\\d{1,3})?\\d{10,15}$|^$",
-        message = "Phone must be a valid number (10-15 digits, optional +country code)"
+        regexp = "^(\\+?[\\d\\s\\-().]{7,20})?$",
+        message = "Phone must be a valid number (7-20 characters, digits/spaces/dashes allowed)"
     )
     @Size(max = 20, message = "Phone must be ≤ 20 characters")
     private String phone;

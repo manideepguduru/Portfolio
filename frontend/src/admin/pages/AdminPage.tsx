@@ -624,7 +624,11 @@ function ContactsAdmin() {
                 <div>
                   <span style={{ color: '#e6edf3', fontWeight: 600, fontSize: '.9rem' }}>{c.name}</span>
                   <span style={{ color: '#8b949e', fontSize: '.8rem', marginLeft: '.5rem' }}>{c.email}</span>
-                  {c.phone && <span style={{ color: '#8b949e', fontSize: '.8rem', marginLeft: '.5rem' }}>{c.phone}</span>}
+                  {c.phone && (
+                    <a href={`tel:${c.phone}`} style={{ color: '#00d9ff', fontSize: '.85rem', marginLeft: '.75rem', textDecoration: 'none', fontWeight: 600 }}>
+                      \u260E {c.phone}
+                    </a>
+                  )}
                 </div>
                 <span style={{ color: '#484f58', fontSize: '.75rem', whiteSpace: 'nowrap' }}>
                   {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

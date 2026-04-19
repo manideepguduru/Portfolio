@@ -38,7 +38,8 @@ export default function ContactForm() {
 
     setLoading(true);
     try {
-      const res = await contactApi.submit(form);
+      const sanitized = { ...form, phone: form.phone?.replace(/[\s\-().]/g, '') || '' };
+      const res = await contactApi.submit(sanitized);
       toast.success(res.message);
       setForm(empty);
       setSent(true);
