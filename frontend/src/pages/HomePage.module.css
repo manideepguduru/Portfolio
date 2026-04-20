@@ -60,6 +60,10 @@
   padding: 4rem 5%;
 }
 .contactLeft { margin-top: 0.5rem; }
+.contactTag {
+  display: table;
+  margin: 0 auto 1rem;
+}
 .contactItems {
   display: flex;
   flex-direction: column;
