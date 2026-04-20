@@ -21,8 +21,7 @@ export default function ContactPage() {
             <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className={styles.card} title="Open WhatsApp">
               <span className={styles.cardIcon}>💬</span>
               <div>
-                <div className={styles.cardTitle}>WhatsApp (Fastest)</div>
-                <div className={styles.cardSub}>Click to message</div>
+                <div className={styles.cardTitle}>WhatsApp</div>
               </div>
             </a>
             <a href="mailto:softwarekattubanisa@gmail.com" className={styles.card}>
