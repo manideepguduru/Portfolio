@@ -23,23 +23,22 @@ export default function AboutSection() {
             <span className="section-tag">About Me</span>
             <h2 className="section-title">Engineer. Developer.<br />Digital Creator.</h2>
             <p>
-              I am a <strong>Digital Specialist Engineer at Infosys</strong> with hands-on expertise
-              in web development, testing, and automation. I don't just write code — I build
-              solutions that deliver <strong>real results</strong>.
+              I am a <strong>Digital Specialist Engineer at Infosys</strong> focused on web
+              development, testing, and automation. I build practical digital solutions that
+              drive <strong>real results</strong>.
             </p>
             <p>
-              I work with <strong>businesses</strong> to get them online with clean, fast, and
-              converting websites. I also help <strong>final year students</strong> (B.Tech, MCA,
-              BCA, M.Tech) build complete projects — from ideation to working demo — that are
-              ready to submit and impress examiners.
+              I help <strong>businesses</strong> launch clean, fast websites that convert. I also
+              help <strong>final year students</strong> (B.Tech, MCA, BCA, M.Tech) build complete,
+              working projects from idea to final demo.
             </p>
             <blockquote className={styles.quote}>
-              "My goal is simple: help businesses grow online, and help students graduate
-              confidently — through modern technology and practical solutions."
+              "My goal is simple: help businesses grow online and help students graduate with
+              confidence through practical technology solutions."
             </blockquote>
             <p>
-              Beyond my corporate role I've built a community of <strong>15,000+ people across
-              social platforms</strong> sharing tech, career, and web development content.
+              Beyond my role at Infosys, I have built a <strong>15,000+ member community</strong>
+              where I share web, tech, and career guidance.
             </p>
             <div className={styles.actions}>
               <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className="btn-primary">

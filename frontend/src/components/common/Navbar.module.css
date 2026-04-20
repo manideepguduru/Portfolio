@@ -193,12 +193,7 @@
   .nav { height: 60px; padding: 0 4%; }
   .logo { font-size: 1.1rem; }
   .right { gap: 0.7rem; }
-  .hireBtn {
-    padding: 0.45rem 0.9rem;
-    font-size: 0.72rem;
-    min-height: 38px;
-    letter-spacing: 0.03em;
-  }
+  .hireBtn { display: none; }
   .mobileBackdrop { top: 60px; }
   .mobile { top: 60px; padding: 1.2rem 4%; gap: 0.6rem; }
   .mobileLink { font-size: 0.9rem; padding: 0.7rem 0; }
@@ -207,12 +202,7 @@
 @media (max-width: 600px) {
   .nav { height: 55px; padding: 0 3%; }
   .logo { font-size: 1rem; }
-  .right { gap: 0.55rem; }
-  .hireBtn {
-    min-height: 36px;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.68rem;
-  }
+  .right { gap: 0.3rem; }
   .hamburger { gap: 5px; }
   .hamburger span { width: 24px; height: 2px; }
   .mobileBackdrop { top: 55px; }
@@ -223,10 +213,5 @@
 @media (max-width: 480px) {
   .nav { height: 50px; }
   .logo { font-size: 0.95rem; }
-  .hireBtn {
-    min-height: 34px;
-    padding: 0.35rem 0.72rem;
-    font-size: 0.64rem;
-  }
   .mobileBackdrop { top: 50px; }
 }

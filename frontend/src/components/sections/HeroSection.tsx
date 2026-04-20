@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import styles from './HeroSection.module.css';
 
 const phrases = [
-  'I build websites for businesses',
-  'I build final year projects',
-  'I craft landing pages',
-  'I automate workflows',
+  'Websites for growing businesses',
+  'Final year projects that get approved',
+  'Landing pages that convert',
+  'Automation that saves time',
 ];
 
 export default function HeroSection() {
@@ -59,13 +59,13 @@ export default function HeroSection() {
         </h1>
 
         <p className={styles.sub}>
-          Digital Specialist Engineer at Infosys — I help <strong>businesses</strong> get online
-          and <strong>final year students</strong> build submission-ready projects with full
-          source code, documentation, and live demos.
+          Digital Specialist Engineer at Infosys helping <strong>businesses</strong> launch fast,
+          modern websites and <strong>final year students</strong> build complete, submission-ready
+          projects with source code, docs, and demo support.
         </p>
 
         <div className={styles.proof}>
-          <div className={styles.pill}>� <strong>50+</strong> Projects Delivered</div>
+          <div className={styles.pill}>🚀 <strong>50+</strong> Projects Delivered</div>
           <div className={styles.pill}>👁 <strong>745K+</strong> Monthly Views</div>
         </div>
 

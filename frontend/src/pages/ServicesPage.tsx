@@ -6,8 +6,8 @@ import type { Service } from '../types';
 import styles from './ServicesPage.module.css';
 
 const highlights = [
-  { icon: '▪', title: 'Business Websites', desc: 'Professional sites that build trust and drive customers to your door — for restaurants, clinics, agencies, shops and more.' },
-  { icon: '▪', title: 'Final Year Projects', desc: 'Complete B.Tech / MCA / BCA / M.Tech projects with source code, documentation, and a live demo. Submission-ready.' },
+  { icon: '🏢', title: 'Business Websites', desc: 'Professional websites that build trust and turn visitors into leads for clinics, stores, agencies, and local brands.' },
+  { icon: '🎓', title: 'Final Year Projects', desc: 'Complete B.Tech, MCA, BCA, and M.Tech projects with source code, report support, and working demo delivery.' },
 ];
 
 export default function ServicesPage() {
@@ -29,8 +29,8 @@ export default function ServicesPage() {
         <span className="section-tag">Services</span>
         <h1 className="section-title">Services Built for Results</h1>
         <p className="section-sub">
-          Whether you're a business owner who needs a website, or a student who needs a
-          final year project — I've got you covered.
+          Practical services for business growth and student success, delivered with a clear
+          scope, timeline, and support.
         </p>
       </div>
 
@@ -95,8 +95,8 @@ export default function ServicesPage() {
         <div className={styles.inner}>
           <h2 className="section-title" style={{ marginBottom: '1.5rem' }}>Ready to Start Your Project?</h2>
           <p className="section-sub" style={{ marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
-            Whether you need a business website or a complete final year project, I'm ready to help.
-            Let's discuss your requirements and bring your ideas to life.
+            Need a website or a complete final year project? Share your requirement and
+            I will help you ship it with confidence.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className="btn-primary">

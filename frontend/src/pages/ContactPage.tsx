@@ -8,15 +8,14 @@ export default function ContactPage() {
         <span className="section-tag">Contact</span>
         <h1 className="section-title">Let's Build Something Great</h1>
         <p className="section-sub">
-          Have a project in mind? Need a final year project? Just say hello.
-          I respond within 24 hours.
+          Share your requirement, timeline, and goals. I usually reply within 24 hours.
         </p>
       </div>
 
       <div className={styles.inner}>
         <div className={styles.info}>
           <h2>Get in Touch</h2>
-          <p>Pick the fastest way to reach me:</p>
+          <p>Choose the channel that works best for you:</p>
 
           <div className={styles.cards}>
             <a href="https://wa.me/919346929001" target="_blank" rel="noopener" className={styles.card} title="Open WhatsApp">
@@ -53,7 +52,7 @@ export default function ContactPage() {
         <div className={styles.formWrap}>
           <div className={styles.formCard}>
             <h3>Send a Message</h3>
-            <p>Fill in the form and I'll get back to you within 24 hours.</p>
+            <p>Fill the form once and I will get back with next steps.</p>
             <ContactForm />
           </div>
         </div>

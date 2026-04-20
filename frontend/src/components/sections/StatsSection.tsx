@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './StatsSection.module.css';
 
 const stats = [
-  { icon: '�', target: 50,     label: 'Projects Delivered',   suffix: '+',  divisor: 1 },
+  { icon: '🚀', target: 50,     label: 'Projects Delivered',   suffix: '+',  divisor: 1 },
   { icon: '👁',  target: 745000, label: 'Monthly Views',       suffix: 'K+', divisor: 1000 },
   { icon: '🏢',  target: 30,     label: 'Business Websites',   suffix: '+',  divisor: 1 },
   { icon: '🎓',  target: 50,     label: 'Student Projects',    suffix: '+',  divisor: 1 },
@@ -57,7 +57,7 @@ export default function StatsSection() {
       <div className={styles.inner}>
         <div className={styles.heading}>
           <span className="section-tag">Track Record</span>
-          <h2 className="section-title">Delivering Results Since 2020</h2>
+          <h2 className="section-title">Results You Can Trust Since 2020</h2>
         </div>
         <div className={styles.grid}>
           {stats.map(s => <StatCard key={s.label} {...s} />)}

@@ -28,7 +28,7 @@ export default function ProjectsPage() {
         <span className="section-tag">Portfolio</span>
         <h1 className="section-title">My Projects</h1>
         <p className="section-sub">
-          A collection of work spanning machine learning, web development, and automation.
+          A focused portfolio of web, automation, and project-delivery work.
         </p>
       </div>
 

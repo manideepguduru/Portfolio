@@ -165,19 +165,6 @@ h1, h2, h3, h4, h5 {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 60px;
-  height: 8px;
-  background: linear-gradient(90deg, #00d8ff, #3498db);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 216, 255, 0.4);
 }
 
 .section-sub { 
@@ -191,7 +178,6 @@ h1, h2, h3, h4, h5 {
 }
 .text-center { text-align: center; }
 .text-center .section-sub { margin: 0 auto; }
-.text-center .section-title::after { left: 50%; transform: translateX(-50%); }
 
 /* ── Buttons ────────────────────────────────────────────────── */
 .btn-primary {
