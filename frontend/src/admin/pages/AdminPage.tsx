@@ -626,7 +626,7 @@ function ContactsAdmin() {
                   <span style={{ color: '#8b949e', fontSize: '.8rem', marginLeft: '.5rem' }}>{c.email}</span>
                   {c.phone && (
                     <a href={`tel:${c.phone}`} style={{ color: '#00d9ff', fontSize: '.85rem', marginLeft: '.75rem', textDecoration: 'none', fontWeight: 600 }}>
-                      \u260E {c.phone}
+                      {c.phone}
                     </a>
                   )}
                 </div>

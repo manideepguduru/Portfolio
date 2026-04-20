@@ -94,6 +94,13 @@
   gap: 1.8rem;
 }
 
+.hireBtn {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.8rem;
+  min-height: 40px;
+  border-radius: 999px;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -112,6 +119,28 @@
   border-radius: 2px;
 }
 
+.hamburgerOpen span:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+}
+
+.hamburgerOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerOpen span:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+}
+
+.mobileBackdrop {
+  position: fixed;
+  inset: 0;
+  top: 60px;
+  border: none;
+  background: rgba(3, 8, 18, 0.4);
+  backdrop-filter: blur(1px);
+  z-index: 998;
+}
+
 /* Mobile dropdown */
 .mobile {
   position: absolute;
@@ -124,6 +153,7 @@
   flex-direction: column;
   gap: 0.8rem;
   animation: slideDown 0.3s ease;
+  z-index: 999;
 }
 
 @keyframes slideDown {
@@ -134,12 +164,21 @@
 .mobileLink {
   color: #cbd5e1;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.8rem 0;
   border-bottom: 1px solid rgba(0, 217, 255, 0.08);
   transition: all 0.3s;
 }
 .mobileLink:hover, .mobileLink.active { color: #00d9ff; }
+
+.mobileHireBtn {
+  margin-top: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  min-height: 44px;
+  font-size: 0.82rem;
+  padding: 0.7rem 1rem;
+}
 
 @media (max-width: 900px) {
   .nav { padding: 0 4%; }
@@ -153,6 +192,14 @@
   .hamburger { display: flex; }
   .nav { height: 60px; padding: 0 4%; }
   .logo { font-size: 1.1rem; }
+  .right { gap: 0.7rem; }
+  .hireBtn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.72rem;
+    min-height: 38px;
+    letter-spacing: 0.03em;
+  }
+  .mobileBackdrop { top: 60px; }
   .mobile { top: 60px; padding: 1.2rem 4%; gap: 0.6rem; }
   .mobileLink { font-size: 0.9rem; padding: 0.7rem 0; }
 }
@@ -160,8 +207,15 @@
 @media (max-width: 600px) {
   .nav { height: 55px; padding: 0 3%; }
   .logo { font-size: 1rem; }
+  .right { gap: 0.55rem; }
+  .hireBtn {
+    min-height: 36px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.68rem;
+  }
   .hamburger { gap: 5px; }
   .hamburger span { width: 24px; height: 2px; }
+  .mobileBackdrop { top: 55px; }
   .mobile { top: 55px; padding: 1rem 3%; gap: 0.5rem; }
   .mobileLink { font-size: 0.85rem; padding: 0.6rem 0; }
 }
@@ -169,4 +223,10 @@
 @media (max-width: 480px) {
   .nav { height: 50px; }
   .logo { font-size: 0.95rem; }
+  .hireBtn {
+    min-height: 34px;
+    padding: 0.35rem 0.72rem;
+    font-size: 0.64rem;
+  }
+  .mobileBackdrop { top: 50px; }
 }

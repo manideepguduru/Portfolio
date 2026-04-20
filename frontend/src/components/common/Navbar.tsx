@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './Navbar.module.css';
 
@@ -13,6 +13,7 @@ export default function Navbar() {
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
   const location = useLocation();
+  const navRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -20,13 +21,35 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
+  useEffect(() => {
+    const closeOnOutsideTap = (event: MouseEvent | TouchEvent) => {
+      if (!menuOpen) return;
+      const target = event.target as Node;
+      if (navRef.current && !navRef.current.contains(target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideTap);
+    document.addEventListener('touchstart', closeOnOutsideTap);
+
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideTap);
+      document.removeEventListener('touchstart', closeOnOutsideTap);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
   const isLinkActive = (link: typeof links[0]): boolean => {
     if (link.to === '/') return location.pathname === '/';
     return location.pathname === link.to;
   };
 
   return (
-    <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
+    <nav ref={navRef} className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <Link to="/" className={styles.logo}>
         GM<span>.</span>dev
       </Link>
@@ -46,37 +69,45 @@ export default function Navbar() {
       </ul>
 
       <div className={styles.right}>
-        <Link to="/contact" className="btn-primary" style={{ padding: '0.5rem 1.2rem', fontSize: '0.85rem' }}>
+        <Link to="/contact" className={`${styles.hireBtn} btn-primary`}>
           Hire Me
         </Link>
         <button
-          className={styles.hamburger}
+          className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
           onClick={() => setMenuOpen(p => !p)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
-          <span className={menuOpen ? styles.open : ''} />
-          <span className={menuOpen ? styles.open : ''} />
-          <span className={menuOpen ? styles.open : ''} />
+          <span />
+          <span />
+          <span />
         </button>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className={styles.mobile}>
-          {links.map(l => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={isLinkActive(l) ? `${styles.mobileLink} ${styles.active}` : styles.mobileLink}
-              onClick={() => setMenuOpen(false)}
-            >
-              {l.label}
+        <>
+          <button
+            className={styles.mobileBackdrop}
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          />
+          <div className={styles.mobile}>
+            {links.map(l => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={isLinkActive(l) ? `${styles.mobileLink} ${styles.active}` : styles.mobileLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link to="/contact" className={`${styles.mobileHireBtn} btn-primary`} onClick={() => setMenuOpen(false)}>
+              Hire Me
             </Link>
-          ))}
-          <Link to="/contact" className="btn-primary" style={{ marginTop: '0.5rem' }} onClick={() => setMenuOpen(false)}>
-            Hire Me
-          </Link>
-        </div>
+          </div>
+        </>
       )}
     </nav>
   );

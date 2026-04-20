@@ -10,9 +10,9 @@
 
 .text p {
   color: #cbd5e1;
-  line-height: 1.9;
-  margin-bottom: 1.2rem;
-  font-size: 0.95rem;
+  line-height: 1.85;
+  margin-bottom: 1.05rem;
+  font-size: 0.94rem;
   font-weight: 400;
 }
 .text strong { 
@@ -35,6 +35,12 @@
 }
 
 .actions { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: 2rem; }
+
+.actions :global(.btn-primary),
+.actions :global(.btn-secondary) {
+  min-width: 200px;
+  justify-content: center;
+}
 
 /* Right column */
 .right { display: flex; flex-direction: column; gap: 2rem; }
@@ -122,10 +128,15 @@
 @media (max-width: 768px) {
   .section { padding: 3rem 5%; }
   .grid { gap: 3rem; }
-  .text p { font-size: 0.9rem; margin-bottom: 1rem; }
+  .text p { font-size: 0.9rem; margin-bottom: 0.9rem; line-height: 1.75; }
   .quote { padding: 1.2rem 1.4rem; margin: 1.5rem 0; font-size: 0.9rem; }
   .actions { gap: 0.8rem; margin-top: 1.5rem; }
-  .actions .btn-primary, .actions .btn-secondary { flex: 1; min-height: 44px; }
+  .actions :global(.btn-primary), .actions :global(.btn-secondary) {
+    flex: 1;
+    min-height: 44px;
+    padding: 0.9rem 1rem;
+    font-size: 0.8rem;
+  }
   
   .card { padding: 1.5rem; }
   .skills { gap: 0.6rem; }
@@ -141,10 +152,14 @@
 @media (max-width: 600px) {
   .section { padding: 2.5rem 4%; }
   .grid { gap: 2.5rem; }
-  .text p { font-size: 0.85rem; line-height: 1.7; }
+  .text p { font-size: 0.84rem; line-height: 1.72; }
   .quote { padding: 1rem; margin: 1.2rem 0; font-size: 0.85rem; }
   .actions { flex-direction: column; gap: 0.6rem; }
-  .actions .btn-primary, .actions .btn-secondary { width: 100%; }
+  .actions :global(.btn-primary), .actions :global(.btn-secondary) {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
   
   .right { gap: 1.5rem; }
   .card { padding: 1.2rem; }
@@ -161,6 +176,6 @@
 @media (max-width: 480px) {
   .section { padding: 2rem 4%; }
   .grid { gap: 2rem; }
-  .text p { font-size: 0.8rem; }
+  .text p { font-size: 0.8rem; line-height: 1.68; }
   .quote { padding: 0.8rem 1rem; margin: 1rem 0; font-size: 0.8rem; }
 }

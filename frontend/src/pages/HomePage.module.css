@@ -97,7 +97,25 @@
 }
 
 @media (max-width: 768px) {
-  .servicesGrid, .projectsGrid { grid-template-columns: 1fr; gap: 1.2rem; }
+  .servicesGrid { grid-template-columns: 1fr; gap: 1.2rem; }
+  .projectsGrid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.25rem 0.2rem 0.7rem;
+    margin: 0 -0.2rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .projectsGrid::-webkit-scrollbar { height: 6px; }
+  .projectsGrid::-webkit-scrollbar-thumb {
+    background: rgba(0, 217, 255, 0.35);
+    border-radius: 999px;
+  }
+  .projectsGrid > * {
+    flex: 0 0 min(82vw, 340px);
+    scroll-snap-align: start;
+  }
   .servicesSection, .projectsSection { padding: 2.5rem 5%; }
   .ci { padding: 0.8rem 1rem; }
   .cta { padding: 2rem 5%; }
