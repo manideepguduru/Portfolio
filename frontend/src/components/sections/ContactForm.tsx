@@ -113,9 +113,6 @@ export default function ContactForm() {
       <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
         {loading ? '⏳ Sending...' : '📨 Send Message'}
       </button>
-      <p className={styles.alt}>
-        Or WhatsApp directly: <a href="https://wa.me/919346929001" target="_blank" rel="noopener">Click here</a>
-      </p>
     </form>
   );
 }

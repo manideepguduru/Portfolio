@@ -103,7 +103,7 @@ export default function HomePage() {
             <p className="section-sub">Have a project in mind? Need a final year project? Just say hello.</p>
             <div className={styles.contactItems}>
               <div className={styles.ci}><span>📧</span><div><div className={styles.ciLabel}>Email</div><div>softwarekattubanisa@gmail.com</div></div></div>
-              <div className={styles.ci}><span>📱</span><div><div className={styles.ciLabel}>WhatsApp</div><div><a href="https://wa.me/919346929001" target="_blank" rel="noopener" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Click to Message</a></div></div></div>
+              <div className={`${styles.ci} ${styles.ciNoIcon}`}><div><div className={styles.ciLabel}>WhatsApp</div><div><a href="https://wa.me/919346929001" target="_blank" rel="noopener" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Click to Message</a></div></div></div>
               <div className={styles.ci}><span>📍</span><div><div className={styles.ciLabel}>Location</div><div>Bangalore, Karnataka</div></div></div>
               <div className={styles.ci}><span>⚡</span><div><div className={styles.ciLabel}>Response Time</div><div>Within 24 hours</div></div></div>
             </div>
