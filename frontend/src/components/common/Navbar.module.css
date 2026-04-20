@@ -95,10 +95,15 @@
 }
 
 .hireBtn {
+  display: none;
   padding: 0.55rem 1.2rem;
   font-size: 0.8rem;
   min-height: 40px;
   border-radius: 999px;
+}
+
+@media (min-width: 769px) {
+  .hireBtn { display: inline-flex; }
 }
 
 /* Hamburger */
@@ -193,7 +198,6 @@
   .nav { height: 60px; padding: 0 4%; }
   .logo { font-size: 1.1rem; }
   .right { gap: 0.7rem; }
-  .hireBtn { display: none; }
   .mobileBackdrop { top: 60px; }
   .mobile { top: 60px; padding: 1.2rem 4%; gap: 0.6rem; }
   .mobileLink { font-size: 0.9rem; padding: 0.7rem 0; }
