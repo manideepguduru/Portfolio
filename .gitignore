@@ -39,3 +39,6 @@ coverage/
 # Misc
 .cache
 .parcel-cache
+analyze-response.txt
+resume-sample.txt
+resume/

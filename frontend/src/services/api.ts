@@ -2,6 +2,7 @@ import axios from 'axios';
 import type {
   ApiResponse, Project, ProjectDTO,
   Service, ServiceDTO, Contact, ContactDTO,
+  ResumeReviewResult,
 } from '../types';
 
 // Base URL — Use environment variable, fallback to /api for dev
@@ -74,6 +75,20 @@ export const contactApi = {
 
   delete: (id: number) =>
     api.delete<ApiResponse<void>>(`/contact/${id}`).then(r => r.data),
+};
+
+export const checkerApi = {
+  analyze: (payload: { resume: File; jobDescription?: string }) => {
+    const formData = new FormData();
+    formData.append('resume', payload.resume);
+    if (payload.jobDescription?.trim()) {
+      formData.append('jobDescription', payload.jobDescription.trim());
+    }
+
+    return api.post<ResumeReviewResult>('/checker/analyze', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(r => r.data);
+  },
 };
 
 export default api;

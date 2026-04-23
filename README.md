@@ -132,6 +132,7 @@ Password: admin@123
 |-------|-------------|
 | `/` | Home page with hero, stats, featured projects |
 | `/projects` | All portfolio projects |
+| `/resume` | Integrated ATS resume checker with upload, score, and tips |
 | `/services` | Available services |
 | `/contact` | Contact form with WhatsApp link |
 
@@ -367,6 +368,7 @@ MIT License - feel free to use this template for your portfolio!
 |--------------|------------------------------------------|
 | `/`          | Home — Hero, Stats, About, Services, Projects, Contact |
 | `/projects`  | Full project list with featured filter   |
+| `/resume`    | ATS resume checker embedded in the main portfolio app |
 | `/services`  | All services + How It Works section      |
 | `/contact`   | Contact form + direct contact info       |
 | `/admin`     | Admin panel — manage projects, services, read messages |

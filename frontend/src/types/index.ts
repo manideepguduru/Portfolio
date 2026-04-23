@@ -80,5 +80,25 @@ export interface ContactDTO {
   message: string;
 }
 
+export interface ResumeDetectedData {
+  candidateName: string;
+  email: string;
+  phone: string;
+  targetRole: string;
+  topSkills: string[];
+}
+
+export interface ResumeReviewResult {
+  runId: number;
+  score: number;
+  overallAssessment: string;
+  strengths: string[];
+  issuesFound: string[];
+  tips: string[];
+  fileName: string;
+  roleContext: string;
+  detectedData: ResumeDetectedData;
+}
+
 // ── Form validation errors ───────────────────────────────────
 export type FormErrors<T> = Partial<Record<keyof T, string>>;
