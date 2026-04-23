@@ -87,8 +87,8 @@ function ConfidenceTag({ value }: { value: string }) {
   const label = `${confidence} confidence`;
   return <span className={`${styles.confidenceTag} ${styles[confidence]}`}>{label}</span>;
 }
-
 export default function ResumeCheckerPage() {
+  const label = `${confidence}`;
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState('');
   const [analyzeResult, setAnalyzeResult] = useState<ResumeReviewResult | null>(null);
@@ -111,14 +111,14 @@ export default function ResumeCheckerPage() {
     setAnalyzeResult(null);
     setMessage(file ? `Selected ${file.name}.` : '');
   }
-
   async function onCheckResume() {
+    setMessage(file ? `✓ ${file.name} ready` : '');
     if (!resumeFile) {
       setMessage('Upload a resume file before running the ATS check.');
       return;
     }
-
     setChecking(true);
+      setMessage('Please upload a resume to analyze.');
     setMessage('');
 
     try {
@@ -134,8 +134,8 @@ export default function ResumeCheckerPage() {
     } finally {
       setChecking(false);
     }
-  }
-
+      setMessage(`Analysis complete — Score: ${result.score}%`);
+      setMessage('Unable to analyze resume. Please try again.');
   return (
     <div className={styles.page}>
       <div className={styles.grid} aria-hidden="true" />
@@ -165,13 +165,10 @@ export default function ResumeCheckerPage() {
                 Download Report
               </button>
             )}
-          </div>
-        </div>
-
-        <div className={styles.formGrid}>
-          <label className={styles.field}>
-            <span>Resume File</span>
             <input type="file" accept=".pdf,.doc,.docx,.txt" onChange={onResumeChange} />
+                    <div className={styles.kicker}>ATS Checker</div>
+                    <h1>Analyze Your Resume</h1>
+                    <p>Check how your resume performs with ATS systems. Upload a file and get your score instantly.</p>
           </label>
           <label className={`${styles.field} ${styles.fieldWide}`}>
             <span>Job Description or Role</span>
@@ -254,12 +251,12 @@ export default function ResumeCheckerPage() {
                     value={compareRunId}
                     onChange={(event) => setCompareRunId(event.target.value ? Number(event.target.value) : '')}
                   >
-                    <option value="">Select a run</option>
-                    {history
-                      .filter((run) => run.runId !== analyzeResult.runId)
+                                    <span>Context</span>
+                                    <h3>Compare Results</h3>
+                              <p>PDF, DOCX, DOC, and TXT formats supported.</p>
                       .map((run) => (
                         <option key={run.runId} value={run.runId}>
-                          Run #{run.runId} - {run.fileName} ({run.score}%)
+                          {run.fileName} ({run.score}%)
                         </option>
                       ))}
                   </select>
