@@ -20,6 +20,10 @@ services:
         fromDatabase:
           name: portfolio-db
           property: database
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: portfolio-db
+          property: uri
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: portfolio-db

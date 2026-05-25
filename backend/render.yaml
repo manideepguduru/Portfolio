@@ -13,11 +13,29 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: production
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        fromDatabase:
+          name: portfolio-db
+          property: uri
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        fromDatabase:
+          name: portfolio-db
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
+        fromDatabase:
+          name: portfolio-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: portfolio-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: portfolio-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: portfolio-db
+          property: database
       - key: CORS_ALLOWED_ORIGINS
         sync: false
       - key: JWT_SECRET
